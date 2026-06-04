@@ -1,0 +1,34 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-cream: var(--cream);
+  --color-berry: var(--berry);
+  --color-berry-deep: var(--berry-deep);
+  --color-grass: var(--grass);
+  --color-grass-deep: var(--grass-deep);
+  --font-script: "Pinyon Script", cursive;
+  --font-display: "Playfair Display", serif;
+  --font-sans: "Inter", sans-serif;
+}
+
+:root {
+  --background: oklch(0.55 0.15 145);
+  --foreground: oklch(0.25 0.08 25);
+  --cream: oklch(0.95 0.04 85);
+  --berry: oklch(0.45 0.18 25);
+  --berry-deep: oklch(0.32 0.16 25);
+  --grass: oklch(0.55 0.16 145);
+  --grass-deep: oklch(0.4 0.14 145);
+}
+
+@layer base {
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+  }
+}
