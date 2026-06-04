@@ -12,4 +12,8 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // Enable Nitro on build so Cloudflare Pages generates the correct Cloudflare worker output.
+  nitro: true,
+  // Cloudflare Pages needs to detect a plugins array in Vite config.
+  plugins: [],
 });
