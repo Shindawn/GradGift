@@ -58,6 +58,34 @@ function Gingham({ className = "", rotate = 0 }: { className?: string; rotate?: 
   );
 }
 
+function CakeWithCandle({ isBlowing }: { isBlowing: boolean }) {
+  return (
+    <div className="relative w-full">
+      <img src={cake} alt="Birthday cake" className="w-full drop-shadow-lg" />
+      <div
+        className={`absolute left-[50%] top-[16%] h-12 w-3 -translate-x-1/2 rounded-full bg-cream/90 shadow-[0_0_0_1px_rgba(0,0,0,0.08)] ${
+          isBlowing ? "animate-candle-blow" : ""
+        }`}
+      />
+      <div
+        className={`absolute left-[50%] top-[8%] h-5 w-5 -translate-x-1/2 rounded-full transition-all duration-300 ${
+          isBlowing ? "opacity-0" : "animate-candle-flicker"
+        }`}
+        style={{
+          background:
+            "radial-gradient(circle at 40% 30%, rgba(255,235,179,1), rgba(252,211,77,0.95), rgba(251,146,60,0.8), rgba(249,115,22,0.65))",
+        }}
+      />
+      {isBlowing ? (
+        <>
+          <div className="absolute left-[47%] top-[3%] h-5 w-5 -translate-x-1/2 rounded-full bg-white/70 blur-sm animate-smoke-puff" />
+          <div className="absolute left-[53%] top-[6%] h-4 w-4 -translate-x-1/2 rounded-full bg-white/60 blur-sm animate-smoke-puff delay-150" />
+        </>
+      ) : null}
+    </div>
+  );
+}
+
 type ModalKey = "letter" | "pictorial" | "wishes" | "achievements" | null;
 
 const MODAL_CONTENT: Record<
@@ -128,6 +156,7 @@ const MODAL_CONTENT: Record<
 function Index() {
   const [open, setOpen] = useState<ModalKey>(null);
   const [musicOn, setMusicOn] = useState(false);
+  const [isCakeBlowing, setIsCakeBlowing] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const videoId = "e2vyrIQTFqc";
   const iframeSrc = `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1&loop=1&playlist=${videoId}&mute=1&playsinline=1&controls=0&modestbranding=1`;
@@ -144,13 +173,19 @@ function Index() {
       @keyframes wiggle { 0%,100%{transform:translateY(0) rotate(var(--r,0deg))} 50%{transform:translateY(-6px) rotate(calc(var(--r,0deg) - 4deg))} }
       @keyframes blanket-breathe { 0%,100%{transform:rotate(-4deg) scale(1)} 50%{transform:rotate(-4deg) scale(1.01)} }
       @keyframes shimmer { 0%,100%{filter:drop-shadow(0 0 0 rgba(255,220,120,0))} 50%{filter:drop-shadow(0 0 12px rgba(255,220,120,0.55))} }
+      @keyframes fade-up { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+      @keyframes candle-flicker { 0%,100%{transform:scaleY(1) translateY(0)} 50%{transform:scaleY(1.04) translateY(-1px)} }
+      @keyframes candle-blow { 0%{transform:translateY(0) scaleY(1)} 30%{transform:translateY(-3px) scaleY(0.96)} 100%{transform:translateY(-8px) scaleY(0.86)} }
+      @keyframes smoke-puff { 0%{opacity:0;transform:translateY(0) scale(0.35)} 20%{opacity:0.65;transform:translateY(-10px) scale(0.75)} 100%{opacity:0;transform:translateY(-36px) scale(1.2)} }
       .anim-floaty  { animation: floaty 4.5s ease-in-out infinite; }
       .anim-sway    { animation: sway 5s ease-in-out infinite; transform-origin: 50% 100%; }
       .anim-wiggle  { animation: wiggle 3.8s ease-in-out infinite; }
       .anim-breathe { animation: blanket-breathe 7s ease-in-out infinite; }
       .anim-shimmer { animation: shimmer 3.2s ease-in-out infinite; }
-      @keyframes fade-up { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
       .anim-fade-up { animation: fade-up .9s ease-out both; }
+      .animate-candle-flicker { animation: candle-flicker 0.22s ease-in-out infinite; }
+      .animate-candle-blow { animation: candle-blow 1.9s ease-out forwards; }
+      .animate-smoke-puff { animation: smoke-puff 1.4s ease-out forwards; }
     `;
     document.head.appendChild(style);
   }, []);
@@ -180,6 +215,12 @@ function Index() {
       }, 100);
       return next;
     });
+  };
+
+  const handleCakeClick = () => {
+    if (isCakeBlowing) return;
+    setIsCakeBlowing(true);
+    setTimeout(() => setIsCakeBlowing(false), 2200);
   };
 
   const clickable =
@@ -300,18 +341,18 @@ function Index() {
           {/* Interactive decorations */}
           <button
             type="button"
-            onClick={() => setOpen("wishes")}
-            aria-label="Open wishes"
+            onClick={handleCakeClick}
+            aria-label="Blow out the candle"
             className={`${clickable} anim-floaty absolute left-[6%] top-[6%] w-[26%]`}
             style={{ ["--r" as never]: "-12deg" }}
           >
-            <img src={cake} alt="" className="w-full drop-shadow-lg" />
+            <CakeWithCandle isBlowing={isCakeBlowing} />
           </button>
 
           <button
             type="button"
-            onClick={() => setOpen("achievements")}
-            aria-label="Open achievements unlocked"
+            onClick={() => setOpen("wishes")}
+            aria-label="Open wishes in the cherry basket"
             className={`${clickable} anim-wiggle absolute right-[6%] top-[6%] w-[28%]`}
             style={{ ["--r" as never]: "6deg" }}
           >
@@ -365,7 +406,7 @@ function Index() {
         </div>
 
         <p className="mt-4 text-center text-xs text-cream/90 drop-shadow">
-          Tap the cake, cherries, envelope, or camera ✨
+          Tap the cake to blow the candle, then open the cherry basket for wishes ✨
         </p>
       </section>
 
