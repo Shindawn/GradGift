@@ -86,7 +86,79 @@ function CakeWithCandle({ isBlowing }: { isBlowing: boolean }) {
   );
 }
 
-type ModalKey = "letter" | "pictorial" | "wishes" | "achievements" | null;
+function CakeModalBody({
+  isListening,
+  hasBlown,
+  volume,
+  status,
+  onStart,
+}: {
+  isListening: boolean;
+  hasBlown: boolean;
+  volume: number;
+  status: "idle" | "listening" | "success" | "error";
+  onStart: () => void;
+}) {
+  return (
+    <div className="space-y-4 text-sm text-berry-deep">
+      <div className="rounded-[2rem] border border-berry/20 bg-cream/80 p-4 shadow-[0_18px_40px_rgba(0,0,0,0.12)]">
+        <CakeWithCandle isBlowing={status === "listening" || hasBlown} />
+        <div className="mt-4 flex items-center justify-between gap-3">
+          <div>
+            <p className="text-xs uppercase tracking-[0.26em] text-berry-deep/70">
+              {hasBlown ? "Wish received" : "Blow into your mic"}
+            </p>
+            <p className="mt-1 text-[0.7rem] text-berry-deep/80">
+              {hasBlown
+                ? "You earned this one. Congrats!"
+                : "Blow gently, then watch the candle go out."}
+            </p>
+          </div>
+          <span className="rounded-full bg-berry/10 px-3 py-1 text-[0.7rem] text-berry-deep">
+            {Math.round(Math.min(100, volume * 300))}%
+          </span>
+        </div>
+        <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-berry/10">
+          <div
+            className="h-full rounded-full bg-berry transition-all duration-150"
+            style={{ width: `${Math.min(100, volume * 300)}%` }}
+          />
+        </div>
+      </div>
+
+      {status === "error" ? (
+        <div className="rounded-xl bg-red-100 px-3 py-2 text-xs text-red-700">
+          Microphone permission is required to blow the candle. Allow audio access and try again.
+        </div>
+      ) : null}
+
+      {hasBlown ? (
+        <div className="rounded-2xl border border-berry/20 bg-berry/10 p-4 text-center text-sm text-berry-deep">
+          <p className="font-semibold text-berry">Congrats! you deserved it.</p>
+          <p className="mt-2 text-xs text-berry-deep/80">
+            The wish is now tucked into the cherry basket with our strawberry theme.
+          </p>
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={onStart}
+          className="w-full rounded-full bg-berry px-4 py-2 text-sm font-semibold text-cream transition hover:bg-berry-deep"
+        >
+          {status === "listening" ? "Listening..." : "Blow the candle"}
+        </button>
+      )}
+
+      {!hasBlown ? (
+        <p className="text-xs text-berry-deep/70">
+          Tip: speak or blow softly into the mic. The flame is styled to match the cake motif.
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+type ModalKey = "letter" | "pictorial" | "wishes" | "achievements" | "cake" | null;
 
 const MODAL_CONTENT: Record<
   Exclude<ModalKey, null>,
@@ -156,7 +228,14 @@ const MODAL_CONTENT: Record<
 function Index() {
   const [open, setOpen] = useState<ModalKey>(null);
   const [musicOn, setMusicOn] = useState(false);
-  const [isCakeBlowing, setIsCakeBlowing] = useState(false);
+  const [cakeStatus, setCakeStatus] = useState<"idle" | "listening" | "success" | "error">("idle");
+  const [cakeVolume, setCakeVolume] = useState(0);
+  const [cakeBlown, setCakeBlown] = useState(false);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const sourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const animationRef = useRef<number | null>(null);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const videoId = "e2vyrIQTFqc";
   const iframeSrc = `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1&loop=1&playlist=${videoId}&mute=1&playsinline=1&controls=0&modestbranding=1`;
@@ -217,11 +296,93 @@ function Index() {
     });
   };
 
-  const handleCakeClick = () => {
-    if (isCakeBlowing) return;
-    setIsCakeBlowing(true);
-    setTimeout(() => setIsCakeBlowing(false), 2200);
+  const cleanupCakeAudio = () => {
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+      animationRef.current = null;
+    }
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+    }
+    if (audioContextRef.current) {
+      audioContextRef.current.close().catch(() => undefined);
+      audioContextRef.current = null;
+    }
+    sourceRef.current = null;
+    analyserRef.current = null;
   };
+
+  const startCakeBlow = async () => {
+    if (cakeStatus === "listening" || cakeBlown) return;
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setCakeStatus("error");
+      return;
+    }
+
+    try {
+      setCakeStatus("listening");
+      setCakeVolume(0);
+      setCakeBlown(false);
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const audioContext = new AudioContext();
+      const source = audioContext.createMediaStreamSource(stream);
+      const analyser = audioContext.createAnalyser();
+      analyser.fftSize = 2048;
+      source.connect(analyser);
+      audioContextRef.current = audioContext;
+      sourceRef.current = source;
+      analyserRef.current = analyser;
+      streamRef.current = stream;
+      const dataArray = new Uint8Array(analyser.frequencyBinCount);
+      let blowFrames = 0;
+
+      const tick = () => {
+        if (!analyserRef.current) return;
+        analyserRef.current.getByteTimeDomainData(dataArray);
+        let sum = 0;
+        for (const value of dataArray) {
+          const normalized = value / 128 - 1;
+          sum += normalized * normalized;
+        }
+        const rms = Math.sqrt(sum / dataArray.length);
+        setCakeVolume(rms);
+
+        if (rms > 0.12) {
+          blowFrames += 1;
+        } else {
+          blowFrames = 0;
+        }
+
+        if (blowFrames > 8) {
+          setCakeBlown(true);
+          setCakeStatus("success");
+          cleanupCakeAudio();
+          return;
+        }
+
+        animationRef.current = requestAnimationFrame(tick);
+      };
+
+      tick();
+    } catch (error) {
+      setCakeStatus("error");
+      cleanupCakeAudio();
+    }
+  };
+
+  useEffect(() => {
+    if (open !== "cake") {
+      cleanupCakeAudio();
+      if (cakeStatus !== "success") {
+        setCakeStatus("idle");
+      }
+    }
+
+    return () => {
+      cleanupCakeAudio();
+    };
+  }, [open]);
 
   const clickable =
     "cursor-pointer transition-transform duration-200 hover:scale-110 hover:-rotate-2 focus:outline-none focus:ring-2 focus:ring-berry/60 rounded-full";
@@ -341,12 +502,17 @@ function Index() {
           {/* Interactive decorations */}
           <button
             type="button"
-            onClick={handleCakeClick}
-            aria-label="Blow out the candle"
+            onClick={() => {
+              setOpen("cake");
+              setCakeStatus("idle");
+              setCakeVolume(0);
+              setCakeBlown(false);
+            }}
+            aria-label="Open cake celebration"
             className={`${clickable} anim-floaty absolute left-[6%] top-[6%] w-[26%]`}
             style={{ ["--r" as never]: "-12deg" }}
           >
-            <CakeWithCandle isBlowing={isCakeBlowing} />
+            <CakeWithCandle isBlowing={false} />
           </button>
 
           <button
@@ -406,7 +572,7 @@ function Index() {
         </div>
 
         <p className="mt-4 text-center text-xs text-cream/90 drop-shadow">
-          Tap the cake to blow the candle, then open the cherry basket for wishes ✨
+          Tap the strawberry cake to celebrate, then open the cherry basket for wishes ✨
         </p>
       </section>
 
@@ -419,13 +585,27 @@ function Index() {
                   style={{ fontFamily: "Pinyon Script, cursive" }}
                   className="text-3xl text-berry"
                 >
-                  {MODAL_CONTENT[open].title}
+                  {open === "cake" ? "Blow the Strawberry Cake" : MODAL_CONTENT[open].title}
                 </DialogTitle>
                 <DialogDescription className="text-berry-deep/80">
-                  {MODAL_CONTENT[open].subtitle}
+                  {open === "cake"
+                    ? "Blow the candle and hear your own celebration."
+                    : MODAL_CONTENT[open].subtitle}
                 </DialogDescription>
               </DialogHeader>
-              <div className="text-berry-deep">{MODAL_CONTENT[open].body}</div>
+              <div className="text-berry-deep">
+                {open === "cake" ? (
+                  <CakeModalBody
+                    isListening={cakeStatus === "listening"}
+                    hasBlown={cakeBlown}
+                    volume={cakeVolume}
+                    status={cakeStatus}
+                    onStart={startCakeBlow}
+                  />
+                ) : (
+                  MODAL_CONTENT[open].body
+                )}
+              </div>
             </>
           )}
         </DialogContent>
