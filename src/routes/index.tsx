@@ -23,11 +23,11 @@ import { Music2, VolumeX } from "lucide-react";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Congrats Graduate! Ma. Loureen Tiozon" },
+      { title: "Congrats Graduate! Ma. Loureen P. Tiozon" },
       {
         name: "description",
         content:
-          "A picnic-themed tribute for Ma. Loureen Tiozon, Cum Laude, University of Santo Tomas, Batch 2026.",
+          "A picnic-themed tribute for Ma. Loureen P. Tiozon, Cum Laude, University of Santo Tomas, Batch 2026.",
       },
     ],
     links: [
@@ -94,7 +94,7 @@ const MODAL_CONTENT: Record<
           className="h-auto w-full rounded-sm object-cover"
         />
         <p className="mt-3 text-center text-xs italic text-berry-deep">
-          Ma. Loureen Tiozon · UST Batch 2026
+          Ma. Loureen P. Tiozon · UST Batch 2026
         </p>
       </div>
     ),
@@ -262,7 +262,7 @@ function Index() {
               className="mt-3 text-berry"
               style={{ fontFamily: "Pinyon Script, cursive", fontSize: "2rem", lineHeight: 0.95 }}
             >
-              Ma. Loureen
+              Ma. Loureen P.
             </div>
             <div
               className="text-berry"
