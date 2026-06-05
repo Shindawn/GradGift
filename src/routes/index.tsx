@@ -20,6 +20,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -309,10 +310,115 @@ function DiscoSongBody({
   );
 }
 
-type ModalKey = "letter" | "pictorial" | "wishes" | "achievements" | "cake" | "music" | null;
+function ShareModalBody({
+  currentUrl,
+  shareCopied,
+  onShare,
+  onCopy,
+}: {
+  currentUrl: string;
+  shareCopied: boolean;
+  onShare: (platform: "twitter" | "facebook" | "whatsapp") => void;
+  onCopy: () => Promise<void>;
+}) {
+  return (
+    <div className="space-y-4 text-sm text-berry-deep">
+      <p className="text-sm text-berry-deep/90">
+        Share this strawberry tribute as an animated video clip or GIF with your favorite social feed.
+      </p>
+
+      <Tabs defaultValue="video" className="space-y-4 w-full">
+        <TabsList className="gap-2 justify-between flex-wrap">
+          <TabsTrigger value="video" className="flex-1 min-w-[8rem]">
+            Animated Clip
+          </TabsTrigger>
+          <TabsTrigger value="gif" className="flex-1 min-w-[8rem]">
+            GIF
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="video">
+          <div className="rounded-3xl border border-berry/15 bg-cream/80 p-4 shadow-[0_18px_40px_rgba(0,0,0,0.12)]">
+            <div className="relative overflow-hidden rounded-[2rem] border border-berry/10 bg-gradient-to-br from-amber-50 via-rose-100 to-cream p-4">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.7),transparent_28%)]" />
+              <div className="relative flex h-32 items-center justify-center">
+                <div className="h-16 w-16 rounded-full bg-berry/70 shadow-[0_16px_40px_rgba(200,55,75,0.24)] animate-pulse" />
+              </div>
+              <p className="mt-4 text-center text-xs text-berry-deep/70">
+                A motion preview for your share-ready clip.
+              </p>
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="gif">
+          <div className="rounded-3xl border border-berry/15 bg-cream/80 p-4 shadow-[0_18px_40px_rgba(0,0,0,0.12)]">
+            <div className="relative overflow-hidden rounded-[2rem] border border-berry/10 bg-gradient-to-br from-rose-50 via-cream to-amber-50 p-4">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.7),transparent_28%)]" />
+              <div className="relative grid h-32 place-items-center gap-2 text-center">
+                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white/80 shadow-[0_12px_24px_rgba(0,0,0,0.12)]">
+                  <span className="text-3xl text-berry">GIF</span>
+                </div>
+                <p className="text-xs text-berry-deep/70">
+                  Instant-friendly GIF preview for sharing across stories and chats.
+                </p>
+              </div>
+            </div>
+          </div>
+        </TabsContent>
+      </Tabs>
+
+      <div className="grid gap-2 sm:grid-cols-3">
+        <button
+          type="button"
+          onClick={() => onShare("twitter")}
+          className="rounded-full bg-sky-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-sky-600"
+        >
+          Tweet it
+        </button>
+        <button
+          type="button"
+          onClick={() => onShare("facebook")}
+          className="rounded-full bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+        >
+          Share to Facebook
+        </button>
+        <button
+          type="button"
+          onClick={() => onShare("whatsapp")}
+          className="rounded-full bg-emerald-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-600"
+        >
+          WhatsApp
+        </button>
+      </div>
+
+      <div className="rounded-3xl border border-berry/15 bg-white/80 p-3 shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
+        <div className="flex flex-wrap items-center gap-2">
+          <input
+            readOnly
+            value={currentUrl}
+            className="min-w-0 flex-1 rounded-2xl border border-berry/10 bg-cream/80 px-3 py-2 text-xs text-berry-deep shadow-sm"
+          />
+          <button
+            type="button"
+            onClick={onCopy}
+            className="rounded-2xl bg-berry px-4 py-2 text-xs font-semibold text-cream transition hover:bg-berry-deep"
+          >
+            {shareCopied ? "Copied!" : "Copy link"}
+          </button>
+        </div>
+        <p className="mt-2 text-[0.68rem] text-berry-deep/70">
+          Share a direct link to this celebration page so friends can watch the animated tribute.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+type ModalKey = "letter" | "pictorial" | "wishes" | "achievements" | "share" | "cake" | "music" | null;
 
 const MODAL_CONTENT: Record<
-  Exclude<ModalKey, "cake" | "music" | null>,
+  Exclude<ModalKey, "cake" | "music" | "share" | null>,
   { title: string; subtitle: string; body: React.ReactNode }
 > = {
   letter: {
@@ -396,6 +502,8 @@ function Index() {
   const [cakeVolume, setCakeVolume] = useState(0);
   const [cakeBlown, setCakeBlown] = useState(false);
   const [isSongPlaying, setIsSongPlaying] = useState(false);
+  const [currentUrl, setCurrentUrl] = useState("");
+  const [shareCopied, setShareCopied] = useState(false);
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const sourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
@@ -464,6 +572,44 @@ function Index() {
     playSong();
   };
 
+  const openShareModal = () => {
+    setOpen("share");
+  };
+
+  const shareText =
+    "Celebrate Ma. Loureen's graduation with this strawberry picnic tribute!";
+
+  const shareToPlatform = (platform: "twitter" | "facebook" | "whatsapp") => {
+    if (!currentUrl) return;
+    const encodedUrl = encodeURIComponent(currentUrl);
+    const encodedText = encodeURIComponent(shareText);
+    let href = "";
+
+    switch (platform) {
+      case "twitter":
+        href = `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`;
+        break;
+      case "facebook":
+        href = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+        break;
+      case "whatsapp":
+        href = `https://api.whatsapp.com/send?text=${encodedText}%20${encodedUrl}`;
+        break;
+    }
+
+    window.open(href, "_blank", "noopener,noreferrer");
+  };
+
+  const copyShareLink = async () => {
+    if (!currentUrl || !navigator.clipboard) return;
+    try {
+      await navigator.clipboard.writeText(currentUrl);
+      setShareCopied(true);
+    } catch {
+      setShareCopied(false);
+    }
+  };
+
   useEffect(() => {
     if (typeof window === "undefined") return;
     const params = new URLSearchParams(window.location.search);
@@ -471,6 +617,17 @@ function Index() {
       playSong();
     }
   }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    setCurrentUrl(window.location.href);
+  }, []);
+
+  useEffect(() => {
+    if (!shareCopied) return;
+    const timeout = window.setTimeout(() => setShareCopied(false), 2200);
+    return () => window.clearTimeout(timeout);
+  }, [shareCopied]);
 
   const openCakeModal = () => {
     requestCakeMicrophonePermission();
@@ -712,11 +869,14 @@ function Index() {
             className="anim-floaty pointer-events-none absolute right-[30%] top-[2%] w-[20%] drop-shadow-lg"
             style={{ ["--r" as never]: "-12deg" }}
           />
-          <img
-            src={plate}
-            alt=""
-            className="anim-floaty pointer-events-none absolute left-[36%] top-[3%] w-[22%] drop-shadow-lg"
-          />
+          <button
+            type="button"
+            onClick={openShareModal}
+            aria-label="Share this picnic tribute"
+            className={`${clickable} anim-floaty absolute left-[36%] top-[3%] w-[22%]`}
+          >
+            <img src={plate} alt="Share plate" className="w-full drop-shadow-lg" />
+          </button>
           <img
             src={strawberryBasket}
             alt=""
@@ -751,14 +911,18 @@ function Index() {
                     ? "Blow the Strawberry Cake"
                     : open === "music"
                       ? "Cherry Disco"
-                      : MODAL_CONTENT[open].title}
+                      : open === "share"
+                        ? "Share the Celebration"
+                        : MODAL_CONTENT[open].title}
                 </DialogTitle>
                 <DialogDescription className="text-berry-deep/80">
                   {open === "cake"
                     ? "Blow the candle and hear your own celebration."
                     : open === "music"
                       ? "You're On Your Own, Kid"
-                    : MODAL_CONTENT[open].subtitle}
+                      : open === "share"
+                        ? "Share this animated tribute as a clip or GIF."
+                        : MODAL_CONTENT[open].subtitle}
                 </DialogDescription>
               </DialogHeader>
               <div className="text-berry-deep">
@@ -776,6 +940,13 @@ function Index() {
                     isPlaying={isSongPlaying}
                     onPlay={() => setIsSongPlaying(true)}
                     onStop={() => setIsSongPlaying(false)}
+                  />
+                ) : open === "share" ? (
+                  <ShareModalBody
+                    currentUrl={currentUrl}
+                    shareCopied={shareCopied}
+                    onShare={shareToPlatform}
+                    onCopy={copyShareLink}
                   />
                 ) : (
                   MODAL_CONTENT[open].body
