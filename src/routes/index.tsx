@@ -12,9 +12,7 @@ import plate from "@/assets/plate.png";
 import camera from "@/assets/camera.png";
 import graduatePhoto from "@/assets/graduate-photo.jpg";
 import taylorSwiftSong from "@/assets/taylorswift.mp3";
-import { Pause, Play, Volume2, Twitter, Facebook, MessageSquare, DownloadCloud } from "lucide-react";
-import * as React from "react";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Pause, Play, Volume2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -22,150 +20,70 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-function ShareModalBody({
-  currentUrl,
-  shareCopied,
-  onShare,
-  onCopy,
-  onGenerateClip,
-  onGenerateGif,
-}: {
-  currentUrl: string;
-  shareCopied: boolean;
-  onShare: (platform: "twitter" | "facebook" | "whatsapp") => void;
-  onCopy: () => Promise<void>;
-  onGenerateClip: () => void;
-  onGenerateGif: () => void;
-}) {
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+
+export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Congrats Graduate! Ma. Loureen P. Tiozon" },
+      {
+        name: "description",
+        content:
+          "A picnic-themed tribute for Ma. Loureen P. Tiozon, Cum Laude, University of Santo Tomas, Batch 2026.",
+      },
+    ],
+    links: [
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Inter:wght@400;600&display=swap",
+      },
+    ],
+  }),
+  component: Index,
+});
+
+function Gingham({ className = "", rotate = 0 }: { className?: string; rotate?: number }) {
   return (
-    <div className="space-y-4 text-sm text-berry-deep">
-      <p className="text-sm text-berry-deep/90">
-        Share this strawberry tribute as an animated video clip or GIF with your favorite social feed.
-      </p>
-
-      <div className="rounded-lg border border-berry/10 bg-cream/80 p-3 text-xs text-berry-deep/80">
-        <strong className="block text-[0.8rem] text-berry">How to use</strong>
-        <ol className="mt-2 list-inside list-decimal space-y-1">
-          <li>Choose <em>Animated Clip</em> or <em>GIF</em>.</li>
-          <li>Press <strong>Generate</strong> to create a share file (opens a preview tab).</li>
-          <li>Use the social buttons or copy the link to share.</li>
-        </ol>
-      </div>
-
-      <Tabs defaultValue="video" className="space-y-4 w-full">
-        <TabsList className="gap-2 justify-between flex-wrap">
-          <TabsTrigger value="video" className="flex-1 min-w-[8rem]">
-            Animated Clip
-          </TabsTrigger>
-          <TabsTrigger value="gif" className="flex-1 min-w-[8rem]">
-            GIF
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="video">
-          <div className="rounded-3xl border border-berry/15 bg-cream/80 p-4 shadow-[0_18px_40px_rgba(0,0,0,0.12)]">
-            <div className="relative overflow-hidden rounded-[2rem] border border-berry/10 bg-gradient-to-br from-amber-50 via-rose-100 to-cream p-4">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.7),transparent_28%)]" />
-              <div className="relative flex h-32 items-center justify-center">
-                <div className="h-16 w-16 rounded-full bg-berry/70 shadow-[0_16px_40px_rgba(200,55,75,0.24)] animate-pulse" />
-              </div>
-              <p className="mt-4 text-center text-xs text-berry-deep/70">
-                A motion preview for your share-ready clip.
-              </p>
-              <div className="mt-3 flex justify-center">
-                <button
-                  type="button"
-                  onClick={onGenerateClip}
-                  className="inline-flex items-center gap-2 rounded-full bg-berry px-4 py-2 text-xs font-semibold text-cream transition hover:bg-berry-deep"
-                >
-                  <DownloadCloud className="h-4 w-4" /> Generate Clip
-                </button>
-              </div>
-            </div>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="gif">
-          <div className="rounded-3xl border border-berry/15 bg-cream/80 p-4 shadow-[0_18px_40px_rgba(0,0,0,0.12)]">
-            <div className="relative overflow-hidden rounded-[2rem] border border-berry/10 bg-gradient-to-br from-rose-50 via-cream to-amber-50 p-4">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.7),transparent_28%)]" />
-              <div className="relative grid h-32 place-items-center gap-2 text-center">
-                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white/80 shadow-[0_12px_24px_rgba(0,0,0,0.12)]">
-                  <span className="text-3xl text-berry">GIF</span>
-                </div>
-                <p className="text-xs text-berry-deep/70">
-                  Instant-friendly GIF preview for sharing across stories and chats.
-                </p>
-                <div className="mt-3 flex justify-center">
-                  <button
-                    type="button"
-                    onClick={onGenerateGif}
-                    className="inline-flex items-center gap-2 rounded-full bg-berry px-4 py-2 text-xs font-semibold text-cream transition hover:bg-berry-deep"
-                  >
-                    <DownloadCloud className="h-4 w-4" /> Generate GIF
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </TabsContent>
-      </Tabs>
-
-      <div className="grid gap-2 sm:grid-cols-3">
-        <button
-          type="button"
-          onClick={() => onShare("twitter")}
-          className="inline-flex items-center justify-center gap-2 rounded-full bg-sky-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-sky-600"
-        >
-          <Twitter className="h-4 w-4" /> Tweet
-        </button>
-        <button
-          type="button"
-          onClick={() => onShare("facebook")}
-          className="inline-flex items-center justify-center gap-2 rounded-full bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
-        >
-          <Facebook className="h-4 w-4" /> Facebook
-        </button>
-        <button
-          type="button"
-          onClick={() => onShare("whatsapp")}
-          className="inline-flex items-center justify-center gap-2 rounded-full bg-emerald-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-600"
-        >
-          <MessageSquare className="h-4 w-4" /> WhatsApp
-        </button>
-      </div>
-
-      <div className="rounded-3xl border border-berry/15 bg-white/80 p-3 shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
-        <div className="flex flex-wrap items-center gap-2">
-          <input
-            readOnly
-            value={currentUrl}
-            className="min-w-0 flex-1 rounded-2xl border border-berry/10 bg-cream/80 px-3 py-2 text-xs text-berry-deep shadow-sm"
-          />
-          <button
-            type="button"
-            onClick={onCopy}
-            className="rounded-2xl bg-berry px-4 py-2 text-xs font-semibold text-cream transition hover:bg-berry-deep"
-          >
-            {shareCopied ? "Copied!" : "Copy link"}
-          </button>
-        </div>
-        <p className="mt-2 text-[0.68rem] text-berry-deep/70">
-          Share a direct link to this celebration page so friends can watch the animated tribute.
-        </p>
-      </div>
-    </div>
+    <div
+      className={className}
+      style={{
+        transform: `rotate(${rotate}deg)`,
+        backgroundImage:
+          "linear-gradient(45deg, #c8324a 25%, transparent 25%, transparent 75%, #c8324a 75%), linear-gradient(45deg, #c8324a 25%, #fff 25%, #fff 75%, #c8324a 75%)",
+        backgroundSize: "22px 22px",
+        backgroundPosition: "0 0, 11px 11px",
+        boxShadow: "0 14px 40px rgba(0,0,0,0.35)",
+      }}
+    />
   );
 }
 
-function Gingham(props: React.HTMLAttributes<HTMLDivElement>) {
-  return <div {...props} />;
-}
-
-function CakeWithCandle({ isBlowing }: { isBlowing?: boolean }) {
+function CakeWithCandle({ isBlowing }: { isBlowing: boolean }) {
   return (
-    <div className="flex items-center justify-center">
-      <img src={cake} alt="cake" className="h-24 w-24 object-contain" />
+    <div className="relative mx-auto w-3/4">
+      <img src={cake} alt="Birthday cake" className="w-full drop-shadow-lg" />
+      <div
+        className={`absolute left-[50%] top-[16%] h-12 w-3 -translate-x-1/2 rounded-full bg-cream/90 shadow-[0_0_0_1px_rgba(0,0,0,0.08)] ${
+          isBlowing ? "animate-candle-blow" : ""
+        }`}
+      />
+      <div
+        className={`absolute left-[50%] top-[8%] h-5 w-5 -translate-x-1/2 rounded-full transition-all duration-300 ${
+          isBlowing ? "opacity-0" : "animate-candle-flicker"
+        }`}
+        style={{
+          background:
+            "radial-gradient(circle at 40% 30%, rgba(255,235,179,1), rgba(252,211,77,0.95), rgba(251,146,60,0.8), rgba(249,115,22,0.65))",
+        }}
+      />
+      {isBlowing ? (
+        <>
+          <div className="absolute left-[47%] top-[3%] h-5 w-5 -translate-x-1/2 rounded-full bg-white/70 blur-sm animate-smoke-puff" />
+          <div className="absolute left-[53%] top-[6%] h-4 w-4 -translate-x-1/2 rounded-full bg-white/60 blur-sm animate-smoke-puff delay-150" />
+        </>
+      ) : null}
     </div>
   );
 }
@@ -193,7 +111,9 @@ function CakeModalBody({
               {hasBlown ? "Wish received" : "Blow into your mic"}
             </p>
             <p className="mt-1 text-[0.7rem] text-berry-deep/80">
-              {hasBlown ? "You earned this one. Congrats!" : "Blow gently, then watch the candle go out."}
+              {hasBlown
+                ? "You earned this one. Congrats!"
+                : "Blow gently, then watch the candle go out."}
             </p>
           </div>
           <span className="rounded-full bg-berry/10 px-3 py-1 text-[0.7rem] text-berry-deep">
@@ -232,7 +152,9 @@ function CakeModalBody({
       )}
 
       {!hasBlown ? (
-        <p className="text-xs text-berry-deep/70">Tip: speak or blow softly into the mic.</p>
+        <p className="text-xs text-berry-deep/70">
+          Tip: speak or blow softly into the mic.
+        </p>
       ) : null}
     </div>
   );
@@ -388,7 +310,110 @@ function DiscoSongBody({
   );
 }
 
+function ShareModalBody({
+  currentUrl,
+  shareCopied,
+  onShare,
+  onCopy,
+}: {
+  currentUrl: string;
+  shareCopied: boolean;
+  onShare: (platform: "twitter" | "facebook" | "whatsapp") => void;
+  onCopy: () => Promise<void>;
+}) {
+  return (
+    <div className="space-y-4 text-sm text-berry-deep">
+      <p className="text-sm text-berry-deep/90">
+        Share this strawberry tribute as an animated video clip or GIF with your favorite social feed.
+      </p>
 
+      <Tabs defaultValue="video" className="space-y-4 w-full">
+        <TabsList className="gap-2 justify-between flex-wrap">
+          <TabsTrigger value="video" className="flex-1 min-w-[8rem]">
+            Animated Clip
+          </TabsTrigger>
+          <TabsTrigger value="gif" className="flex-1 min-w-[8rem]">
+            GIF
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="video">
+          <div className="rounded-3xl border border-berry/15 bg-cream/80 p-4 shadow-[0_18px_40px_rgba(0,0,0,0.12)]">
+            <div className="relative overflow-hidden rounded-[2rem] border border-berry/10 bg-gradient-to-br from-amber-50 via-rose-100 to-cream p-4">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.7),transparent_28%)]" />
+              <div className="relative flex h-32 items-center justify-center">
+                <div className="h-16 w-16 rounded-full bg-berry/70 shadow-[0_16px_40px_rgba(200,55,75,0.24)] animate-pulse" />
+              </div>
+              <p className="mt-4 text-center text-xs text-berry-deep/70">
+                A motion preview for your share-ready clip.
+              </p>
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="gif">
+          <div className="rounded-3xl border border-berry/15 bg-cream/80 p-4 shadow-[0_18px_40px_rgba(0,0,0,0.12)]">
+            <div className="relative overflow-hidden rounded-[2rem] border border-berry/10 bg-gradient-to-br from-rose-50 via-cream to-amber-50 p-4">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.7),transparent_28%)]" />
+              <div className="relative grid h-32 place-items-center gap-2 text-center">
+                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white/80 shadow-[0_12px_24px_rgba(0,0,0,0.12)]">
+                  <span className="text-3xl text-berry">GIF</span>
+                </div>
+                <p className="text-xs text-berry-deep/70">
+                  Instant-friendly GIF preview for sharing across stories and chats.
+                </p>
+              </div>
+            </div>
+          </div>
+        </TabsContent>
+      </Tabs>
+
+      <div className="grid gap-2 sm:grid-cols-3">
+        <button
+          type="button"
+          onClick={() => onShare("twitter")}
+          className="rounded-full bg-sky-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-sky-600"
+        >
+          Tweet it
+        </button>
+        <button
+          type="button"
+          onClick={() => onShare("facebook")}
+          className="rounded-full bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+        >
+          Share to Facebook
+        </button>
+        <button
+          type="button"
+          onClick={() => onShare("whatsapp")}
+          className="rounded-full bg-emerald-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-600"
+        >
+          WhatsApp
+        </button>
+      </div>
+
+      <div className="rounded-3xl border border-berry/15 bg-white/80 p-3 shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
+        <div className="flex flex-wrap items-center gap-2">
+          <input
+            readOnly
+            value={currentUrl}
+            className="min-w-0 flex-1 rounded-2xl border border-berry/10 bg-cream/80 px-3 py-2 text-xs text-berry-deep shadow-sm"
+          />
+          <button
+            type="button"
+            onClick={onCopy}
+            className="rounded-2xl bg-berry px-4 py-2 text-xs font-semibold text-cream transition hover:bg-berry-deep"
+          >
+            {shareCopied ? "Copied!" : "Copy link"}
+          </button>
+        </div>
+        <p className="mt-2 text-[0.68rem] text-berry-deep/70">
+          Share a direct link to this celebration page so friends can watch the animated tribute.
+        </p>
+      </div>
+    </div>
+  );
+}
 
 type ModalKey = "letter" | "pictorial" | "wishes" | "achievements" | "share" | "cake" | "music" | null;
 
@@ -582,29 +607,6 @@ function Index() {
       setShareCopied(true);
     } catch {
       setShareCopied(false);
-    }
-  };
-
-  const generateClip = () => {
-    if (!currentUrl) return;
-    try {
-      const url = new URL(currentUrl);
-      url.searchParams.set("share", "clip");
-      window.open(url.toString(), "_blank", "noopener,noreferrer");
-    } catch {
-      // fallback
-      window.open(currentUrl + "?share=clip", "_blank", "noopener,noreferrer");
-    }
-  };
-
-  const generateGif = () => {
-    if (!currentUrl) return;
-    try {
-      const url = new URL(currentUrl);
-      url.searchParams.set("share", "gif");
-      window.open(url.toString(), "_blank", "noopener,noreferrer");
-    } catch {
-      window.open(currentUrl + "?share=gif", "_blank", "noopener,noreferrer");
     }
   };
 
@@ -871,7 +873,6 @@ function Index() {
             type="button"
             onClick={openShareModal}
             aria-label="Share this picnic tribute"
-            title="Share this celebration"
             className={`${clickable} anim-floaty absolute left-[36%] top-[3%] w-[22%]`}
           >
             <img src={plate} alt="Share plate" className="w-full drop-shadow-lg" />
@@ -946,8 +947,6 @@ function Index() {
                     shareCopied={shareCopied}
                     onShare={shareToPlatform}
                     onCopy={copyShareLink}
-                    onGenerateClip={generateClip}
-                    onGenerateGif={generateGif}
                   />
                 ) : (
                   MODAL_CONTENT[open].body
@@ -960,7 +959,3 @@ function Index() {
     </main>
   );
 }
-
-export const Route = createFileRoute('/')({
-  component: Index,
-});
