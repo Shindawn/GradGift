@@ -135,7 +135,7 @@ function CakeModalBody({
 
       {hasBlown ? (
         <div className="rounded-2xl border border-berry/20 bg-berry/10 p-4 text-center text-sm text-berry-deep">
-          <p className="font-semibold text-berry">Congrats! you deserved it.</p>
+          <p className="font-semibold text-berry">Congrats! grad u ate.</p>
           <p className="mt-2 text-xs text-berry-deep/80">
             The wish is now tucked into the cherry basket with our strawberry theme.
           </p>
