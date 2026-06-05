@@ -18,7 +18,6 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Music2, VolumeX } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -227,7 +226,6 @@ const MODAL_CONTENT: Record<
 
 function Index() {
   const [open, setOpen] = useState<ModalKey>(null);
-  const [musicOn, setMusicOn] = useState(false);
   const [cakeStatus, setCakeStatus] = useState<"idle" | "listening" | "success" | "error">("idle");
   const [cakeVolume, setCakeVolume] = useState(0);
   const [cakeBlown, setCakeBlown] = useState(false);
@@ -236,9 +234,8 @@ function Index() {
   const sourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const animationRef = useRef<number | null>(null);
-  const iframeRef = useRef<HTMLIFrameElement | null>(null);
-  const videoId = "e2vyrIQTFqc";
-  const iframeSrc = `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1&loop=1&playlist=${videoId}&mute=1&playsinline=1&controls=0&modestbranding=1`;
+  const songIframeRef = useRef<HTMLIFrameElement | null>(null);
+  const songVideoId = "hC_8Z5maYO0";
 
   // Floating motion via keyframes injected once
   useEffect(() => {
@@ -269,31 +266,19 @@ function Index() {
     document.head.appendChild(style);
   }, []);
 
-  const toggleMusic = () => {
-    setMusicOn((v) => {
-      const next = !v;
-      setTimeout(() => {
-        const win = iframeRef.current?.contentWindow;
-        if (!win) return;
-        const command = next ? "playVideo" : "pauseVideo";
-        win.postMessage(
-          JSON.stringify({ event: "command", func: command, args: [] }),
-          "*"
-        );
-        if (next) {
-          win.postMessage(
-            JSON.stringify({ event: "command", func: "unMute", args: [] }),
-            "*"
-          );
-        } else {
-          win.postMessage(
-            JSON.stringify({ event: "command", func: "mute", args: [] }),
-            "*"
-          );
-        }
-      }, 100);
-      return next;
-    });
+  const playSong = () => {
+    setTimeout(() => {
+      const win = songIframeRef.current?.contentWindow;
+      if (!win) return;
+      win.postMessage(
+        JSON.stringify({ event: "command", func: "playVideo", args: [] }),
+        "*"
+      );
+      win.postMessage(
+        JSON.stringify({ event: "command", func: "unMute", args: [] }),
+        "*"
+      );
+    }, 100);
   };
 
   const cleanupCakeAudio = () => {
@@ -400,23 +385,12 @@ function Index() {
 
       {/* Hidden YouTube player for the song */}
       <iframe
-        ref={iframeRef}
-        title="background-music"
-        src={iframeSrc}
+        ref={songIframeRef}
+        title="song-player"
+        src={`https://www.youtube.com/embed/${songVideoId}?enablejsapi=1&autoplay=0&controls=0&modestbranding=1&playsinline=1`}
         allow="autoplay; encrypted-media; picture-in-picture"
         className="pointer-events-none absolute h-0 w-0 opacity-0"
       />
-
-      {/* Music toggle */}
-      <button
-        type="button"
-        onClick={toggleMusic}
-        aria-label={musicOn ? "Pause music" : "Play music"}
-        className="fixed right-4 top-4 z-40 flex items-center gap-2 rounded-full bg-cream/90 px-3 py-2 text-xs font-semibold text-berry-deep shadow-lg backdrop-blur transition hover:scale-105"
-      >
-        {musicOn ? <Music2 className="h-4 w-4 animate-pulse" /> : <VolumeX className="h-4 w-4" />}
-        {musicOn ? "You're On Your Own, Kid" : "Play song"}
-      </button>
 
       <section className="relative mx-auto flex min-h-screen w-full max-w-md flex-col items-center justify-center px-4 py-10">
         <div className="relative aspect-[3/4] w-full anim-fade-up">
@@ -563,12 +537,15 @@ function Index() {
             alt=""
             className="anim-floaty pointer-events-none absolute bottom-[2%] right-[20%] w-[24%] drop-shadow-xl"
           />
-          <img
-            src={raspberryBasket}
-            alt=""
-            className="anim-floaty pointer-events-none absolute bottom-[16%] right-[2%] w-[24%] drop-shadow-xl"
+          <button
+            type="button"
+            onClick={playSong}
+            aria-label="Play You're On Your Own, Kid song"
+            className={`${clickable} anim-floaty absolute bottom-[16%] right-[2%] w-[24%]`}
             style={{ ["--r" as never]: "-6deg" }}
-          />
+          >
+            <img src={raspberryBasket} alt="" className="w-full drop-shadow-xl" />
+          </button>
         </div>
 
         <p className="mt-4 text-center text-xs text-cream/90 drop-shadow">
