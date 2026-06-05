@@ -338,13 +338,13 @@ function ShareModalBody({
         </TabsList>
 
         <TabsContent value="video">
-          <div className="rounded-3xl border border-berry/15 bg-cream/80 p-4 shadow-[0_18px_40px_rgba(0,0,0,0.12)]">
-            <div className="relative overflow-hidden rounded-[2rem] border border-berry/10 bg-gradient-to-br from-amber-50 via-rose-100 to-cream p-4">
+          <div className="rounded-2xl border border-berry/15 bg-cream/80 p-2 sm:p-4 shadow-[0_18px_40px_rgba(0,0,0,0.12)]">
+            <div className="relative overflow-hidden rounded-xl sm:rounded-[2rem] border border-berry/10 bg-gradient-to-br from-amber-50 via-rose-100 to-cream p-2 sm:p-4">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.7),transparent_28%)]" />
-              <div className="relative flex h-32 items-center justify-center">
-                <div className="h-16 w-16 rounded-full bg-berry/70 shadow-[0_16px_40px_rgba(200,55,75,0.24)] animate-pulse" />
+              <div className="relative flex h-20 sm:h-32 items-center justify-center">
+                <div className="h-10 sm:h-16 w-10 sm:w-16 rounded-full bg-berry/70 shadow-[0_16px_40px_rgba(200,55,75,0.24)] animate-pulse" />
               </div>
-              <p className="mt-4 text-center text-xs text-berry-deep/70">
+              <p className="mt-2 sm:mt-4 text-center text-xs text-berry-deep/70">
                 A motion preview for your share-ready clip.
               </p>
             </div>
@@ -352,12 +352,12 @@ function ShareModalBody({
         </TabsContent>
 
         <TabsContent value="gif">
-          <div className="rounded-3xl border border-berry/15 bg-cream/80 p-4 shadow-[0_18px_40px_rgba(0,0,0,0.12)]">
-            <div className="relative overflow-hidden rounded-[2rem] border border-berry/10 bg-gradient-to-br from-rose-50 via-cream to-amber-50 p-4">
+          <div className="rounded-2xl border border-berry/15 bg-cream/80 p-2 sm:p-4 shadow-[0_18px_40px_rgba(0,0,0,0.12)]">
+            <div className="relative overflow-hidden rounded-xl sm:rounded-[2rem] border border-berry/10 bg-gradient-to-br from-rose-50 via-cream to-amber-50 p-2 sm:p-4">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.7),transparent_28%)]" />
-              <div className="relative grid h-32 place-items-center gap-2 text-center">
-                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white/80 shadow-[0_12px_24px_rgba(0,0,0,0.12)]">
-                  <span className="text-3xl text-berry">GIF</span>
+              <div className="relative grid h-20 sm:h-32 place-items-center gap-2 text-center">
+                <div className="flex h-12 sm:h-20 w-12 sm:w-20 items-center justify-center rounded-full bg-white/80 shadow-[0_12px_24px_rgba(0,0,0,0.12)]">
+                  <span className="text-xl sm:text-3xl text-berry">GIF</span>
                 </div>
                 <p className="text-xs text-berry-deep/70">
                   Instant-friendly GIF preview for sharing across stories and chats.
@@ -372,42 +372,42 @@ function ShareModalBody({
         <button
           type="button"
           onClick={() => onShare("twitter")}
-          className="rounded-full bg-sky-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-sky-600"
+          className="rounded-full bg-sky-500 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-white transition hover:bg-sky-600"
         >
           Tweet it
         </button>
         <button
           type="button"
           onClick={() => onShare("facebook")}
-          className="rounded-full bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+          className="rounded-full bg-blue-600 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-white transition hover:bg-blue-700"
         >
           Share to Facebook
         </button>
         <button
           type="button"
           onClick={() => onShare("whatsapp")}
-          className="rounded-full bg-emerald-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-600"
+          className="rounded-full bg-emerald-500 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-white transition hover:bg-emerald-600"
         >
           WhatsApp
         </button>
       </div>
 
-      <div className="rounded-3xl border border-berry/15 bg-white/80 p-3 shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
-        <div className="flex flex-wrap items-center gap-2">
+      <div className="rounded-2xl border border-berry/15 bg-white/80 p-2 sm:p-3 shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
+        <div className="flex flex-wrap items-center gap-1 sm:gap-2">
           <input
             readOnly
             value={currentUrl}
-            className="min-w-0 flex-1 rounded-2xl border border-berry/10 bg-cream/80 px-3 py-2 text-xs text-berry-deep shadow-sm"
+            className="min-w-0 flex-1 rounded-xl sm:rounded-2xl border border-berry/10 bg-cream/80 px-2 sm:px-3 py-1 sm:py-2 text-xs text-berry-deep shadow-sm"
           />
           <button
             type="button"
             onClick={onCopy}
-            className="rounded-2xl bg-berry px-4 py-2 text-xs font-semibold text-cream transition hover:bg-berry-deep"
+            className="rounded-lg sm:rounded-2xl bg-berry px-3 sm:px-4 py-1 sm:py-2 text-xs font-semibold text-cream transition hover:bg-berry-deep whitespace-nowrap"
           >
-            {shareCopied ? "Copied!" : "Copy link"}
+            {shareCopied ? "Copied!" : "Copy"}
           </button>
         </div>
-        <p className="mt-2 text-[0.68rem] text-berry-deep/70">
+        <p className="mt-1 sm:mt-2 text-[0.65rem] sm:text-[0.68rem] text-berry-deep/70">
           Share a direct link to this celebration page so friends can watch the animated tribute.
         </p>
       </div>
