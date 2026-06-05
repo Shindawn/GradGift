@@ -157,10 +157,44 @@ function CakeModalBody({
   );
 }
 
-type ModalKey = "letter" | "pictorial" | "wishes" | "achievements" | "cake" | null;
+function DiscoSongBody({
+  songSrc,
+  isPlaying,
+}: {
+  songSrc: string;
+  isPlaying: boolean;
+}) {
+  return (
+    <div className="space-y-4">
+      <div className="relative mx-auto flex h-40 w-40 items-center justify-center">
+        <div className="absolute inset-0 rounded-full bg-[conic-gradient(from_45deg,#f9d94e_0_12%,#ff5c8a_12%_24%,#64d2ff_24%_36%,#7ee081_36%_48%,#f9d94e_48%_60%,#ff5c8a_60%_72%,#64d2ff_72%_84%,#7ee081_84%_100%)] opacity-85 blur-sm" />
+        <div
+          className={`relative h-32 w-32 rounded-full border-4 border-cream bg-[conic-gradient(from_0deg,#ffffff,#ff5c8a,#64d2ff,#f9d94e,#7ee081,#ffffff)] shadow-[0_18px_45px_rgba(0,0,0,0.22)] ${
+            isPlaying ? "animate-disco-spin" : ""
+          }`}
+        >
+          <div className="absolute inset-[28%] rounded-full border-2 border-cream/80 bg-berry-deep" />
+          <div className="absolute left-1/2 top-[-1.8rem] h-8 w-1 -translate-x-1/2 rounded-full bg-berry-deep/60" />
+        </div>
+      </div>
+
+      <div className="overflow-hidden rounded-md border border-berry/20 bg-berry-deep">
+        <iframe
+          title="You're On Your Own, Kid"
+          src={songSrc}
+          allow="autoplay; encrypted-media; picture-in-picture"
+          allowFullScreen
+          className="aspect-video w-full"
+        />
+      </div>
+    </div>
+  );
+}
+
+type ModalKey = "letter" | "pictorial" | "wishes" | "achievements" | "cake" | "music" | null;
 
 const MODAL_CONTENT: Record<
-  Exclude<ModalKey, null>,
+  Exclude<ModalKey, "cake" | "music" | null>,
   { title: string; subtitle: string; body: React.ReactNode }
 > = {
   letter: {
@@ -229,14 +263,15 @@ function Index() {
   const [cakeStatus, setCakeStatus] = useState<"idle" | "listening" | "success" | "error">("idle");
   const [cakeVolume, setCakeVolume] = useState(0);
   const [cakeBlown, setCakeBlown] = useState(false);
+  const [isSongPlaying, setIsSongPlaying] = useState(false);
   const songVideoId = "hC_8Z5maYO0";
   const buildSongSrc = (autoplay = false) => {
     const origin =
       typeof window === "undefined" ? "" : `&origin=${encodeURIComponent(window.location.origin)}`;
 
-    return `https://www.youtube.com/embed/${songVideoId}?enablejsapi=1&autoplay=${
+    return `https://www.youtube-nocookie.com/embed/${songVideoId}?enablejsapi=1&autoplay=${
       autoplay ? "1" : "0"
-    }&controls=0&modestbranding=1&playsinline=1&rel=0${origin}`;
+    }&controls=1&modestbranding=1&playsinline=1&rel=0${origin}`;
   };
   const [songSrc, setSongSrc] = useState(() => buildSongSrc(false));
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -244,7 +279,6 @@ function Index() {
   const sourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const animationRef = useRef<number | null>(null);
-  const songIframeRef = useRef<HTMLIFrameElement | null>(null);
 
   // Floating motion via keyframes injected once
   useEffect(() => {
@@ -262,6 +296,7 @@ function Index() {
       @keyframes candle-flicker { 0%,100%{transform:scaleY(1) translateY(0)} 50%{transform:scaleY(1.04) translateY(-1px)} }
       @keyframes candle-blow { 0%{transform:translateY(0) scaleY(1)} 30%{transform:translateY(-3px) scaleY(0.96)} 100%{transform:translateY(-8px) scaleY(0.86)} }
       @keyframes smoke-puff { 0%{opacity:0;transform:translateY(0) scale(0.35)} 20%{opacity:0.65;transform:translateY(-10px) scale(0.75)} 100%{opacity:0;transform:translateY(-36px) scale(1.2)} }
+      @keyframes disco-spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
       .anim-floaty  { animation: floaty 4.5s ease-in-out infinite; }
       .anim-sway    { animation: sway 5s ease-in-out infinite; transform-origin: 50% 100%; }
       .anim-wiggle  { animation: wiggle 3.8s ease-in-out infinite; }
@@ -271,29 +306,60 @@ function Index() {
       .animate-candle-flicker { animation: candle-flicker 0.22s ease-in-out infinite; }
       .animate-candle-blow { animation: candle-blow 1.9s ease-out forwards; }
       .animate-smoke-puff { animation: smoke-puff 1.4s ease-out forwards; }
+      .animate-disco-spin { animation: disco-spin 1.8s linear infinite; }
     `;
     document.head.appendChild(style);
   }, []);
 
   const playSong = () => {
+    setIsSongPlaying(false);
     setSongSrc(`${buildSongSrc(true)}&start=0&songStart=${Date.now()}`);
+    setOpen("music");
+  };
 
-    const sendPlayCommand = () => {
-      const win = songIframeRef.current?.contentWindow;
-      if (!win) return;
-      win.postMessage(
-        JSON.stringify({ event: "command", func: "unMute", args: [] }),
-        "*"
-      );
-      win.postMessage(
-        JSON.stringify({ event: "command", func: "playVideo", args: [] }),
-        "*"
-      );
+  const openSongTab = () => {
+    if (typeof window === "undefined") {
+      playSong();
+      return;
+    }
+
+    const url = new URL(window.location.href);
+    url.searchParams.set("music", "cherry");
+    const opened = window.open(url.toString(), "_blank", "noopener,noreferrer");
+    if (!opened) {
+      playSong();
+    }
+  };
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("music") === "cherry") {
+      playSong();
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (!String(event.origin).includes("youtube")) return;
+
+      try {
+        const data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
+        const playerState = data?.info?.playerState;
+        if (playerState === 1) {
+          setIsSongPlaying(true);
+        }
+        if (playerState === 0 || playerState === 2 || playerState === 5) {
+          setIsSongPlaying(false);
+        }
+      } catch {
+        // Ignore non-JSON YouTube messages.
+      }
     };
 
-    setTimeout(sendPlayCommand, 350);
-    setTimeout(sendPlayCommand, 1200);
-  };
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, []);
 
   const cleanupCakeAudio = () => {
     if (animationRef.current) {
@@ -397,15 +463,6 @@ function Index() {
     >
       <div className="absolute inset-0 bg-grass-deep/10 mix-blend-multiply" />
 
-      {/* Hidden YouTube player for the song */}
-      <iframe
-        ref={songIframeRef}
-        title="song-player"
-        src={songSrc}
-        allow="autoplay; encrypted-media; picture-in-picture"
-        className="pointer-events-none absolute -left-[9999px] -top-[9999px] h-[200px] w-[200px] opacity-0"
-      />
-
       <section className="relative mx-auto flex min-h-screen w-full max-w-md flex-col items-center justify-center px-4 py-10">
         <div className="relative aspect-[3/4] w-full anim-fade-up">
           {/* Gingham picnic blanket */}
@@ -505,11 +562,8 @@ function Index() {
 
           <button
             type="button"
-            onClick={() => {
-              playSong();
-              setOpen("wishes");
-            }}
-            aria-label="Open wishes in the cherry basket"
+            onClick={openSongTab}
+            aria-label="Open music in the cherry basket"
             className={`${clickable} anim-wiggle absolute right-[6%] top-[6%] w-[28%]`}
             style={{ ["--r" as never]: "6deg" }}
           >
@@ -566,7 +620,7 @@ function Index() {
         </div>
 
         <p className="mt-4 text-center text-xs text-cream/90 drop-shadow">
-          Tap the strawberry cake to celebrate, then open the cherry basket for wishes ✨
+          Tap the strawberry cake to celebrate, then open the cherry basket for the song ✨
         </p>
       </section>
 
@@ -579,11 +633,17 @@ function Index() {
                   style={{ fontFamily: "Pinyon Script, cursive" }}
                   className="text-3xl text-berry"
                 >
-                  {open === "cake" ? "Blow the Strawberry Cake" : MODAL_CONTENT[open].title}
+                  {open === "cake"
+                    ? "Blow the Strawberry Cake"
+                    : open === "music"
+                      ? "Cherry Disco"
+                      : MODAL_CONTENT[open].title}
                 </DialogTitle>
                 <DialogDescription className="text-berry-deep/80">
                   {open === "cake"
                     ? "Blow the candle and hear your own celebration."
+                    : open === "music"
+                      ? "You're On Your Own, Kid"
                     : MODAL_CONTENT[open].subtitle}
                 </DialogDescription>
               </DialogHeader>
@@ -595,6 +655,11 @@ function Index() {
                     volume={cakeVolume}
                     status={cakeStatus}
                     onStart={startCakeBlow}
+                  />
+                ) : open === "music" ? (
+                  <DiscoSongBody
+                    songSrc={songSrc}
+                    isPlaying={isSongPlaying}
                   />
                 ) : (
                   MODAL_CONTENT[open].body
