@@ -717,7 +717,7 @@ function Index() {
                   {open === "cake"
                     ? "Blow the Strawberry Cake"
                     : open === "music"
-                      ? "Taylor Swift"
+                      ? "Cherry Disco"
                       : MODAL_CONTENT[open].title}
                 </DialogTitle>
                 <DialogDescription className="text-berry-deep/80">
