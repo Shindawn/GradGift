@@ -11,6 +11,8 @@ import envelope from "@/assets/envelope.png";
 import plate from "@/assets/plate.png";
 import camera from "@/assets/camera.png";
 import graduatePhoto from "@/assets/graduate-photo.jpg";
+import taylorSwiftSong from "@/assets/taylorswift.mp3";
+import { Pause, Play, Volume2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -160,10 +162,45 @@ function CakeModalBody({
 function DiscoSongBody({
   songSrc,
   isPlaying,
+  onPlay,
+  onStop,
 }: {
   songSrc: string;
   isPlaying: boolean;
+  onPlay: () => void;
+  onStop: () => void;
 }) {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+
+  const formatTime = (seconds: number) => {
+    if (!Number.isFinite(seconds)) return "0:00";
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+  };
+
+  const togglePlayback = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (audio.paused) {
+      audio.play().catch(() => onStop());
+    } else {
+      audio.pause();
+    }
+  };
+
+  const seekTo = (value: string) => {
+    const audio = audioRef.current;
+    if (!audio || duration === 0) return;
+    const nextTime = (Number(value) / 100) * duration;
+    audio.currentTime = nextTime;
+    setCurrentTime(nextTime);
+  };
+
   return (
     <div className="space-y-4">
       <div className="relative mx-auto flex h-40 w-40 items-center justify-center">
@@ -178,14 +215,53 @@ function DiscoSongBody({
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-md border border-berry/20 bg-berry-deep">
-        <iframe
-          title="You're On Your Own, Kid"
+      <div className="rounded-md border border-berry/20 bg-cream/80 p-4 shadow-[0_16px_35px_rgba(0,0,0,0.12)]">
+        <audio
+          ref={audioRef}
+          autoPlay
           src={songSrc}
-          allow="autoplay; encrypted-media; picture-in-picture"
-          allowFullScreen
-          className="aspect-video w-full"
+          onPlay={onPlay}
+          onPause={onStop}
+          onEnded={onStop}
+          onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)}
+          onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
         />
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={togglePlayback}
+            aria-label={isPlaying ? "Pause song" : "Play song"}
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-berry text-cream shadow-[0_10px_22px_rgba(127,24,58,0.28)] transition hover:bg-berry-deep"
+          >
+            {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5 pl-0.5" />}
+          </button>
+
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center justify-between gap-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-berry-deep/70">
+              <span>Cherry Disco</span>
+              <span className="whitespace-nowrap">
+                {formatTime(currentTime)} / {formatTime(duration)}
+              </span>
+            </div>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={progress}
+              onChange={(event) => seekTo(event.currentTarget.value)}
+              aria-label="Song progress"
+              className="mt-3 h-2 w-full cursor-pointer accent-berry"
+              style={{
+                background: `linear-gradient(90deg, #c8324a ${progress}%, rgba(127,24,58,0.15) ${progress}%)`,
+              }}
+            />
+          </div>
+        </div>
+
+        <div className="mt-3 flex items-center gap-2 text-xs text-berry-deep/70">
+          <Volume2 className="h-4 w-4 text-berry" />
+          <span>{isPlaying ? "Now playing" : "Press play to start the song"}</span>
+        </div>
       </div>
     </div>
   );
@@ -264,16 +340,6 @@ function Index() {
   const [cakeVolume, setCakeVolume] = useState(0);
   const [cakeBlown, setCakeBlown] = useState(false);
   const [isSongPlaying, setIsSongPlaying] = useState(false);
-  const songVideoId = "7Gbg6Z70J7E";
-  const buildSongSrc = (autoplay = false) => {
-    const origin =
-      typeof window === "undefined" ? "" : `&origin=${encodeURIComponent(window.location.origin)}`;
-
-    return `https://www.youtube-nocookie.com/embed/${songVideoId}?enablejsapi=1&autoplay=${
-      autoplay ? "1" : "0"
-    }&controls=1&modestbranding=1&playsinline=1&rel=0${origin}`;
-  };
-  const [songSrc, setSongSrc] = useState(() => buildSongSrc(false));
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const sourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
@@ -313,29 +379,29 @@ function Index() {
 
   const playSong = () => {
     setIsSongPlaying(false);
-    setSongSrc(`${buildSongSrc(true)}&start=0&songStart=${Date.now()}`);
     setOpen("music");
   };
+
+  const openMusicTab = () => {
+    if (typeof window === "undefined") {
+      playSong();
+      return;
+    }
+
+    const url = new URL(window.location.href);
+    url.searchParams.set("music", "cherry");
+    const opened = window.open(url.toString(), "_blank", "noopener,noreferrer");
+    if (!opened) {
+      playSong();
+    }
+  };
+
   useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      if (!String(event.origin).includes("youtube")) return;
-
-      try {
-        const data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
-        const playerState = data?.info?.playerState;
-        if (playerState === 1) {
-          setIsSongPlaying(true);
-        }
-        if (playerState === 0 || playerState === 2 || playerState === 5) {
-          setIsSongPlaying(false);
-        }
-      } catch {
-        // Ignore non-JSON YouTube messages.
-      }
-    };
-
-    window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("music") === "cherry") {
+      playSong();
+    }
   }, []);
 
   const cleanupCakeAudio = () => {
@@ -539,8 +605,8 @@ function Index() {
 
           <button
             type="button"
-            onClick={() => setOpen("wishes")}
-            aria-label="Open wishes in the cherry basket"
+            onClick={openMusicTab}
+            aria-label="Open music in the cherry basket"
             className={`${clickable} anim-wiggle absolute right-[6%] top-[6%] w-[28%]`}
             style={{ ["--r" as never]: "6deg" }}
           >
@@ -597,7 +663,7 @@ function Index() {
         </div>
 
         <p className="mt-4 text-center text-xs text-cream/90 drop-shadow">
-          Tap the strawberry cake to celebrate, open the cherry basket for wishes, and use the raspberries below to play the song ✨
+          Tap the strawberry cake to celebrate, then open the cherry basket for the song ✨
         </p>
       </section>
 
@@ -635,8 +701,10 @@ function Index() {
                   />
                 ) : open === "music" ? (
                   <DiscoSongBody
-                    songSrc={songSrc}
+                    songSrc={taylorSwiftSong}
                     isPlaying={isSongPlaying}
+                    onPlay={() => setIsSongPlaying(true)}
+                    onStop={() => setIsSongPlaying(false)}
                   />
                 ) : (
                   MODAL_CONTENT[open].body
