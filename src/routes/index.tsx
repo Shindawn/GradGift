@@ -553,9 +553,23 @@ function Index() {
   };
 
   const copyShareLink = async () => {
-    if (!currentUrl || !navigator.clipboard) return;
+    const urlToCopy = typeof window !== "undefined" ? window.location.href : currentUrl;
+    if (!urlToCopy) return;
+
     try {
-      await navigator.clipboard.writeText(currentUrl);
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(urlToCopy);
+      } else {
+        const textArea = document.createElement("textarea");
+        textArea.value = urlToCopy;
+        textArea.setAttribute("readonly", "");
+        textArea.style.position = "fixed";
+        textArea.style.left = "-9999px";
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+      }
       setShareCopied(true);
     } catch {
       setShareCopied(false);
