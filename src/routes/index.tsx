@@ -425,6 +425,22 @@ function Index() {
     document.head.appendChild(style);
   }, []);
 
+  const micPermissionRequestedRef = useRef(false);
+
+  const requestCakeMicrophonePermission = async () => {
+    if (micPermissionRequestedRef.current) return;
+    micPermissionRequestedRef.current = true;
+
+    if (!navigator.mediaDevices?.getUserMedia) return;
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach((track) => track.stop());
+    } catch {
+      // Permission prompt may have been denied or blocked. We'll still let the user try again.
+    }
+  };
+
   const playSong = () => {
     setIsSongPlaying(false);
     setOpen("music");
@@ -441,6 +457,14 @@ function Index() {
       playSong();
     }
   }, []);
+
+  const openCakeModal = () => {
+    requestCakeMicrophonePermission();
+    setOpen("cake");
+    setCakeStatus("idle");
+    setCakeVolume(0);
+    setCakeBlown(false);
+  };
 
   const cleanupCakeAudio = () => {
     if (animationRef.current) {
@@ -628,12 +652,7 @@ function Index() {
           {/* Interactive decorations */}
           <button
             type="button"
-            onClick={() => {
-              setOpen("cake");
-              setCakeStatus("idle");
-              setCakeVolume(0);
-              setCakeBlown(false);
-            }}
+            onClick={openCakeModal}
             aria-label="Open cake celebration"
             className={`${clickable} anim-floaty absolute left-[6%] top-[6%] w-[26%]`}
             style={{ ["--r" as never]: "-12deg" }}
