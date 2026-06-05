@@ -264,7 +264,7 @@ function Index() {
   const [cakeVolume, setCakeVolume] = useState(0);
   const [cakeBlown, setCakeBlown] = useState(false);
   const [isSongPlaying, setIsSongPlaying] = useState(false);
-  const songVideoId = "hC_8Z5maYO0";
+  const songVideoId = "7Gbg6Z70J7E";
   const buildSongSrc = (autoplay = false) => {
     const origin =
       typeof window === "undefined" ? "" : `&origin=${encodeURIComponent(window.location.origin)}`;
@@ -316,29 +316,6 @@ function Index() {
     setSongSrc(`${buildSongSrc(true)}&start=0&songStart=${Date.now()}`);
     setOpen("music");
   };
-
-  const openSongTab = () => {
-    if (typeof window === "undefined") {
-      playSong();
-      return;
-    }
-
-    const url = new URL(window.location.href);
-    url.searchParams.set("music", "cherry");
-    const opened = window.open(url.toString(), "_blank", "noopener,noreferrer");
-    if (!opened) {
-      playSong();
-    }
-  };
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("music") === "cherry") {
-      playSong();
-    }
-  }, []);
-
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (!String(event.origin).includes("youtube")) return;
@@ -562,8 +539,8 @@ function Index() {
 
           <button
             type="button"
-            onClick={openSongTab}
-            aria-label="Open music in the cherry basket"
+            onClick={() => setOpen("wishes")}
+            aria-label="Open wishes in the cherry basket"
             className={`${clickable} anim-wiggle absolute right-[6%] top-[6%] w-[28%]`}
             style={{ ["--r" as never]: "6deg" }}
           >
@@ -620,7 +597,7 @@ function Index() {
         </div>
 
         <p className="mt-4 text-center text-xs text-cream/90 drop-shadow">
-          Tap the strawberry cake to celebrate, then open the cherry basket for the song ✨
+          Tap the strawberry cake to celebrate, open the cherry basket for wishes, and use the raspberries below to play the song ✨
         </p>
       </section>
 
