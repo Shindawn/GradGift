@@ -152,7 +152,7 @@ function CakeModalBody({
 
       {!hasBlown ? (
         <p className="text-xs text-berry-deep/70">
-          Tip: speak or blow softly into the mic. The flame is styled to match the cake motif.
+          Tip: speak or blow softly into the mic.
         </p>
       ) : null}
     </div>
