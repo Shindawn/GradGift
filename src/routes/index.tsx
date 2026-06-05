@@ -229,13 +229,22 @@ function Index() {
   const [cakeStatus, setCakeStatus] = useState<"idle" | "listening" | "success" | "error">("idle");
   const [cakeVolume, setCakeVolume] = useState(0);
   const [cakeBlown, setCakeBlown] = useState(false);
+  const songVideoId = "hC_8Z5maYO0";
+  const buildSongSrc = (autoplay = false) => {
+    const origin =
+      typeof window === "undefined" ? "" : `&origin=${encodeURIComponent(window.location.origin)}`;
+
+    return `https://www.youtube.com/embed/${songVideoId}?enablejsapi=1&autoplay=${
+      autoplay ? "1" : "0"
+    }&controls=0&modestbranding=1&playsinline=1&rel=0${origin}`;
+  };
+  const [songSrc, setSongSrc] = useState(() => buildSongSrc(false));
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const sourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const animationRef = useRef<number | null>(null);
   const songIframeRef = useRef<HTMLIFrameElement | null>(null);
-  const songVideoId = "hC_8Z5maYO0";
 
   // Floating motion via keyframes injected once
   useEffect(() => {
@@ -267,18 +276,23 @@ function Index() {
   }, []);
 
   const playSong = () => {
-    setTimeout(() => {
+    setSongSrc(`${buildSongSrc(true)}&start=0&songStart=${Date.now()}`);
+
+    const sendPlayCommand = () => {
       const win = songIframeRef.current?.contentWindow;
       if (!win) return;
-      win.postMessage(
-        JSON.stringify({ event: "command", func: "playVideo", args: [] }),
-        "*"
-      );
       win.postMessage(
         JSON.stringify({ event: "command", func: "unMute", args: [] }),
         "*"
       );
-    }, 100);
+      win.postMessage(
+        JSON.stringify({ event: "command", func: "playVideo", args: [] }),
+        "*"
+      );
+    };
+
+    setTimeout(sendPlayCommand, 350);
+    setTimeout(sendPlayCommand, 1200);
   };
 
   const cleanupCakeAudio = () => {
@@ -387,9 +401,9 @@ function Index() {
       <iframe
         ref={songIframeRef}
         title="song-player"
-        src={`https://www.youtube.com/embed/${songVideoId}?enablejsapi=1&autoplay=0&controls=0&modestbranding=1&playsinline=1`}
+        src={songSrc}
         allow="autoplay; encrypted-media; picture-in-picture"
-        className="pointer-events-none absolute h-0 w-0 opacity-0"
+        className="pointer-events-none absolute -left-[9999px] -top-[9999px] h-[200px] w-[200px] opacity-0"
       />
 
       <section className="relative mx-auto flex min-h-screen w-full max-w-md flex-col items-center justify-center px-4 py-10">
@@ -491,7 +505,10 @@ function Index() {
 
           <button
             type="button"
-            onClick={() => setOpen("wishes")}
+            onClick={() => {
+              playSong();
+              setOpen("wishes");
+            }}
             aria-label="Open wishes in the cherry basket"
             className={`${clickable} anim-wiggle absolute right-[6%] top-[6%] w-[28%]`}
             style={{ ["--r" as never]: "6deg" }}
