@@ -328,40 +328,45 @@ function ShareModalBody({
       </p>
 
       <Tabs defaultValue="video" className="space-y-4 w-full">
-        <TabsList className="gap-2 justify-between flex-wrap">
-          <TabsTrigger value="video" className="flex-1 min-w-[8rem]">
+        <TabsList className="flex flex-wrap items-center gap-2 rounded-full border border-berry/15 bg-white/90 p-1 shadow-sm">
+          <TabsTrigger
+            value="video"
+            className="flex-1 min-w-[8rem] rounded-full px-3 py-2 text-xs font-semibold text-berry-deep transition hover:text-berry-deep/80 data-[state=active]:bg-berry data-[state=active]:text-cream"
+          >
             Animated Clip
           </TabsTrigger>
-          <TabsTrigger value="gif" className="flex-1 min-w-[8rem]">
+          <TabsTrigger
+            value="gif"
+            className="flex-1 min-w-[8rem] rounded-full px-3 py-2 text-xs font-semibold text-berry-deep transition hover:text-berry-deep/80 data-[state=active]:bg-berry data-[state=active]:text-cream"
+          >
             GIF
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="video">
-          <div className="rounded-2xl border border-berry/15 bg-cream/80 p-2 sm:p-4 shadow-[0_18px_40px_rgba(0,0,0,0.12)]">
-            <div className="relative overflow-hidden rounded-xl sm:rounded-[2rem] border border-berry/10 bg-gradient-to-br from-amber-50 via-rose-100 to-cream p-2 sm:p-4">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.7),transparent_28%)]" />
-              <div className="relative flex h-20 sm:h-32 items-center justify-center">
-                <div className="h-10 sm:h-16 w-10 sm:w-16 rounded-full bg-berry/70 shadow-[0_16px_40px_rgba(200,55,75,0.24)] animate-pulse" />
+          <div className="rounded-3xl border border-berry/15 bg-cream/80 p-3 shadow-[0_18px_40px_rgba(0,0,0,0.12)] sm:p-4">
+            <div className="relative overflow-hidden rounded-[2rem] border border-berry/10 bg-white/90 p-4 shadow-[0_12px_34px_rgba(0,0,0,0.08)]">
+              <div className="absolute inset-x-6 top-4 h-24 rounded-full bg-amber-100/70 blur-2xl" />
+              <div className="relative flex h-44 items-center justify-center">
+                <img src={plate} alt="Animated clip preview" className="h-36 w-auto drop-shadow-xl" />
               </div>
-              <p className="mt-2 sm:mt-4 text-center text-xs text-berry-deep/70">
-                A motion preview for your share-ready clip.
-              </p>
+              <div className="mt-4 rounded-full bg-berry/10 px-3 py-1 text-center text-xs font-semibold text-berry-deep shadow-sm">
+                Animated clip preview inside the celebration plate.
+              </div>
             </div>
           </div>
         </TabsContent>
 
         <TabsContent value="gif">
-          <div className="rounded-2xl border border-berry/15 bg-cream/80 p-2 sm:p-4 shadow-[0_18px_40px_rgba(0,0,0,0.12)]">
-            <div className="relative overflow-hidden rounded-xl sm:rounded-[2rem] border border-berry/10 bg-gradient-to-br from-rose-50 via-cream to-amber-50 p-2 sm:p-4">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.7),transparent_28%)]" />
-              <div className="relative grid h-20 sm:h-32 place-items-center gap-2 text-center">
-                <div className="flex h-12 sm:h-20 w-12 sm:w-20 items-center justify-center rounded-full bg-white/80 shadow-[0_12px_24px_rgba(0,0,0,0.12)]">
-                  <span className="text-xl sm:text-3xl text-berry">GIF</span>
-                </div>
-                <p className="text-xs text-berry-deep/70">
-                  Instant-friendly GIF preview for sharing across stories and chats.
-                </p>
+          <div className="rounded-3xl border border-berry/15 bg-cream/80 p-3 shadow-[0_18px_40px_rgba(0,0,0,0.12)] sm:p-4">
+            <div className="relative overflow-hidden rounded-[2rem] border border-berry/10 bg-white/90 p-4 shadow-[0_12px_34px_rgba(0,0,0,0.08)]">
+              <div className="absolute inset-x-6 top-4 h-24 rounded-full bg-sky-100/70 blur-2xl" />
+              <div className="relative flex h-44 items-center justify-center">
+                <img src={plate} alt="GIF preview" className="h-36 w-auto drop-shadow-xl" />
+              </div>
+              <div className="mt-4 flex items-center justify-center gap-2 rounded-full bg-berry/10 px-3 py-1 text-xs font-semibold text-berry-deep shadow-sm">
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-berry/20 text-berry">GIF</span>
+                Instant-friendly GIF preview inside the plate.
               </div>
             </div>
           </div>
