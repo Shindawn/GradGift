@@ -354,12 +354,26 @@ const MODAL_CONTENT: Record<
     title: "Wishes",
     subtitle: "Sweet notes for the road ahead",
     body: (
-      <ul className="space-y-3 text-sm">
-        <li>🍓 May every season be kinder than the last.</li>
-        <li>🎂 May your dreams rise gently, like cake in the oven.</li>
-        <li>💌 May love always find your address.</li>
-        <li>🌿 May you keep choosing yourself, again and again.</li>
-      </ul>
+      <div className="space-y-4">
+        <ul className="space-y-4 text-sm leading-relaxed">
+          <li className="flex gap-3 items-start rounded-lg bg-berry/8 p-3 border border-berry/20">
+            <span className="text-lg shrink-0">🍓</span>
+            <span className="text-berry-deep">May every season be kinder than the last.</span>
+          </li>
+          <li className="flex gap-3 items-start rounded-lg bg-berry/8 p-3 border border-berry/20">
+            <span className="text-lg shrink-0">🎂</span>
+            <span className="text-berry-deep">May your dreams rise gently, like cake in the oven.</span>
+          </li>
+          <li className="flex gap-3 items-start rounded-lg bg-berry/8 p-3 border border-berry/20">
+            <span className="text-lg shrink-0">💌</span>
+            <span className="text-berry-deep">May love always find your address.</span>
+          </li>
+          <li className="flex gap-3 items-start rounded-lg bg-berry/8 p-3 border border-berry/20">
+            <span className="text-lg shrink-0">🌿</span>
+            <span className="text-berry-deep">May you keep choosing yourself, again and again.</span>
+          </li>
+        </ul>
+      </div>
     ),
   },
   achievements: {
@@ -710,8 +724,8 @@ function Index() {
           />
           <button
             type="button"
-            onClick={playSong}
-            aria-label="Play You're On Your Own, Kid song"
+            onClick={() => setOpen("wishes")}
+            aria-label="Open wishes"
             className={`${clickable} anim-floaty absolute bottom-[16%] right-[2%] w-[24%]`}
             style={{ ["--r" as never]: "-6deg" }}
           >
