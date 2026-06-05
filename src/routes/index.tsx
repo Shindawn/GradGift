@@ -174,6 +174,7 @@ function DiscoSongBody({
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+  const mirrorTiles = Array.from({ length: 64 }, (_, index) => index);
 
   const formatTime = (seconds: number) => {
     if (!Number.isFinite(seconds)) return "0:00";
@@ -203,15 +204,56 @@ function DiscoSongBody({
 
   return (
     <div className="space-y-4">
-      <div className="relative mx-auto flex h-40 w-40 items-center justify-center">
-        <div className="absolute inset-0 rounded-full bg-[conic-gradient(from_45deg,#f9d94e_0_12%,#ff5c8a_12%_24%,#64d2ff_24%_36%,#7ee081_36%_48%,#f9d94e_48%_60%,#ff5c8a_60%_72%,#64d2ff_72%_84%,#7ee081_84%_100%)] opacity-85 blur-sm" />
+      <div className="relative mx-auto flex h-56 w-full max-w-[18rem] items-end justify-center overflow-hidden rounded-sm border border-berry/15 bg-[radial-gradient(circle_at_50%_22%,rgba(255,246,218,0.92),rgba(255,246,218,0.22)_18%,rgba(127,24,58,0.18)_48%,rgba(28,58,38,0.32)_100%)] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.26),0_18px_45px_rgba(0,0,0,0.18)]">
+        <div className="absolute inset-x-0 bottom-0 h-20 bg-[linear-gradient(180deg,rgba(255,246,218,0),rgba(244,234,212,0.86))]" />
+        <div className="absolute left-1/2 top-0 h-14 w-px -translate-x-1/2 bg-berry-deep/45 shadow-[0_0_18px_rgba(255,246,218,0.7)]" />
+        <div className="absolute left-1/2 top-12 h-2 w-12 -translate-x-1/2 rounded-full bg-berry-deep/45 shadow-[0_2px_8px_rgba(0,0,0,0.18)]" />
         <div
-          className={`relative h-32 w-32 rounded-full border-4 border-cream bg-[conic-gradient(from_0deg,#ffffff,#ff5c8a,#64d2ff,#f9d94e,#7ee081,#ffffff)] shadow-[0_18px_45px_rgba(0,0,0,0.22)] ${
+          className={`absolute left-[-16%] top-8 h-28 w-44 origin-right -rotate-[24deg] bg-[linear-gradient(90deg,rgba(255,246,218,0),rgba(255,92,138,0.2),rgba(255,246,218,0.48),rgba(255,246,218,0))] blur-[1px] ${
+            isPlaying ? "animate-light-sweep" : ""
+          }`}
+        />
+        <div
+          className={`absolute right-[-16%] top-10 h-28 w-44 origin-left rotate-[24deg] bg-[linear-gradient(90deg,rgba(255,246,218,0),rgba(126,224,129,0.16),rgba(255,246,218,0.42),rgba(255,246,218,0))] blur-[1px] ${
+            isPlaying ? "animate-light-sweep-reverse" : ""
+          }`}
+        />
+        <div className="absolute bottom-7 h-8 w-52 rounded-[50%] bg-berry-deep/18 blur-sm" />
+        <div
+          className={`relative mb-12 h-36 w-36 overflow-hidden rounded-full border border-cream/80 bg-[radial-gradient(circle_at_34%_26%,#ffffff_0_6%,#f8f1dc_7%_15%,#d7c9aa_28%,#8f8b85_58%,#3b3236_100%)] shadow-[0_26px_40px_rgba(0,0,0,0.28),inset_-24px_-20px_32px_rgba(48,42,44,0.5),inset_18px_12px_26px_rgba(255,255,255,0.5)] ${
             isPlaying ? "animate-disco-spin" : ""
           }`}
         >
-          <div className="absolute inset-[28%] rounded-full border-2 border-cream/80 bg-berry-deep" />
-          <div className="absolute left-1/2 top-[-1.8rem] h-8 w-1 -translate-x-1/2 rounded-full bg-berry-deep/60" />
+          <div className="absolute inset-0 grid grid-cols-8 grid-rows-8 rounded-full opacity-90 [clip-path:circle(50%)]">
+            {mirrorTiles.map((tile) => {
+              const row = Math.floor(tile / 8);
+              const col = tile % 8;
+              const centerDistance = Math.abs(col - 3.5) + Math.abs(row - 3.5);
+              const lightness = 92 - centerDistance * 8;
+              const tint =
+                (row + col) % 5 === 0
+                  ? "rgba(200,50,74,0.28)"
+                  : (row + col) % 4 === 0
+                    ? "rgba(126,224,129,0.18)"
+                    : "rgba(255,246,218,0.2)";
+
+              return (
+                <span
+                  key={tile}
+                  className="border-[0.5px] border-white/35 shadow-[inset_1px_1px_2px_rgba(255,255,255,0.55),inset_-1px_-1px_2px_rgba(38,34,36,0.28)]"
+                  style={{
+                    background: `linear-gradient(135deg, rgba(255,255,255,0.82), ${tint}), hsl(38 18% ${lightness}%)`,
+                  }}
+                />
+              );
+            })}
+          </div>
+          <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_32%_22%,rgba(255,255,255,0.95),rgba(255,255,255,0.32)_10%,rgba(255,255,255,0)_22%),linear-gradient(120deg,rgba(255,255,255,0.36),rgba(255,255,255,0)_36%,rgba(0,0,0,0.24)_76%)]" />
+          <div
+            className={`absolute left-[58%] top-[18%] h-3 w-3 rounded-full bg-white shadow-[0_0_18px_8px_rgba(255,246,218,0.8)] ${
+              isPlaying ? "animate-disco-glint" : ""
+            }`}
+          />
         </div>
       </div>
 
@@ -238,7 +280,7 @@ function DiscoSongBody({
 
           <div className="min-w-0 flex-1">
             <div className="flex items-center justify-between gap-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-berry-deep/70">
-              <span>Cherry Disco</span>
+              <span>Taylor Swift</span>
               <span className="whitespace-nowrap">
                 {formatTime(currentTime)} / {formatTime(duration)}
               </span>
@@ -363,6 +405,9 @@ function Index() {
       @keyframes candle-blow { 0%{transform:translateY(0) scaleY(1)} 30%{transform:translateY(-3px) scaleY(0.96)} 100%{transform:translateY(-8px) scaleY(0.86)} }
       @keyframes smoke-puff { 0%{opacity:0;transform:translateY(0) scale(0.35)} 20%{opacity:0.65;transform:translateY(-10px) scale(0.75)} 100%{opacity:0;transform:translateY(-36px) scale(1.2)} }
       @keyframes disco-spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+      @keyframes light-sweep { 0%,100%{transform:rotate(-24deg) translateX(-4px);opacity:.42} 50%{transform:rotate(-10deg) translateX(22px);opacity:.82} }
+      @keyframes light-sweep-reverse { 0%,100%{transform:rotate(24deg) translateX(4px);opacity:.38} 50%{transform:rotate(10deg) translateX(-22px);opacity:.76} }
+      @keyframes disco-glint { 0%,100%{opacity:.45;transform:scale(.65)} 45%{opacity:1;transform:scale(1.25)} 70%{opacity:.72;transform:scale(.9)} }
       .anim-floaty  { animation: floaty 4.5s ease-in-out infinite; }
       .anim-sway    { animation: sway 5s ease-in-out infinite; transform-origin: 50% 100%; }
       .anim-wiggle  { animation: wiggle 3.8s ease-in-out infinite; }
@@ -373,6 +418,9 @@ function Index() {
       .animate-candle-blow { animation: candle-blow 1.9s ease-out forwards; }
       .animate-smoke-puff { animation: smoke-puff 1.4s ease-out forwards; }
       .animate-disco-spin { animation: disco-spin 1.8s linear infinite; }
+      .animate-light-sweep { animation: light-sweep 2.8s ease-in-out infinite; }
+      .animate-light-sweep-reverse { animation: light-sweep-reverse 3.2s ease-in-out infinite; }
+      .animate-disco-glint { animation: disco-glint 1.7s ease-in-out infinite; }
     `;
     document.head.appendChild(style);
   }, []);
@@ -383,17 +431,7 @@ function Index() {
   };
 
   const openMusicTab = () => {
-    if (typeof window === "undefined") {
-      playSong();
-      return;
-    }
-
-    const url = new URL(window.location.href);
-    url.searchParams.set("music", "cherry");
-    const opened = window.open(url.toString(), "_blank", "noopener,noreferrer");
-    if (!opened) {
-      playSong();
-    }
+    playSong();
   };
 
   useEffect(() => {
@@ -679,7 +717,7 @@ function Index() {
                   {open === "cake"
                     ? "Blow the Strawberry Cake"
                     : open === "music"
-                      ? "Cherry Disco"
+                      ? "Taylor Swift"
                       : MODAL_CONTENT[open].title}
                 </DialogTitle>
                 <DialogDescription className="text-berry-deep/80">
