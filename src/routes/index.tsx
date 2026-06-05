@@ -322,8 +322,6 @@ function ShareModalBody({
 }) {
   return (
     <div className="space-y-4 text-sm text-berry-deep">
-      <p className="text-sm text-berry-deep/90">Share this strawberry tribute with friends.</p>
-
       <div className="grid gap-3 sm:grid-cols-3">
         <button
           type="button"
