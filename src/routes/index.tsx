@@ -60,7 +60,7 @@ function Gingham({ className = "", rotate = 0 }: { className?: string; rotate?: 
 
 function CakeWithCandle({ isBlowing }: { isBlowing: boolean }) {
   return (
-    <div className="relative w-full">
+    <div className="relative mx-auto w-3/4">
       <img src={cake} alt="Birthday cake" className="w-full drop-shadow-lg" />
       <div
         className={`absolute left-[50%] top-[16%] h-12 w-3 -translate-x-1/2 rounded-full bg-cream/90 shadow-[0_0_0_1px_rgba(0,0,0,0.08)] ${
