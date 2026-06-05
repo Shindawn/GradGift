@@ -373,27 +373,38 @@ function ShareModalBody({
         </TabsContent>
       </Tabs>
 
-      <div className="grid gap-2 sm:grid-cols-3">
+      <div className="grid grid-cols-3 gap-3">
         <button
           type="button"
           onClick={() => onShare("twitter")}
-          className="rounded-full bg-sky-500 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-white transition hover:bg-sky-600"
+          aria-label="Share on Twitter"
+          className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-sky-500 text-white shadow-sm transition hover:bg-sky-600"
         >
-          Tweet it
+          <svg viewBox="0 0 24 24" className="h-6 w-6" fill="currentColor" aria-hidden="true">
+            <path d="M22.46 6c-.77.35-1.6.58-2.46.69a4.26 4.26 0 0 0 1.88-2.35 8.53 8.53 0 0 1-2.7 1.03 4.24 4.24 0 0 0-7.22 3.87A12.03 12.03 0 0 1 3.1 4.8a4.24 4.24 0 0 0 1.31 5.67 4.2 4.2 0 0 1-1.92-.53v.05a4.24 4.24 0 0 0 3.4 4.16 4.27 4.27 0 0 1-1.91.07 4.25 4.25 0 0 0 3.96 2.95A8.5 8.5 0 0 1 2 19.54a12.04 12.04 0 0 0 6.52 1.91c7.83 0 12.11-6.49 12.11-12.11 0-.18 0-.35-.01-.53A8.65 8.65 0 0 0 24 5.6a8.38 8.38 0 0 1-2.54.7z" />
+          </svg>
         </button>
+
         <button
           type="button"
           onClick={() => onShare("facebook")}
-          className="rounded-full bg-blue-600 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-white transition hover:bg-blue-700"
+          aria-label="Share on Facebook"
+          className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-white shadow-sm transition hover:bg-blue-700"
         >
-          Share to Facebook
+          <svg viewBox="0 0 24 24" className="h-6 w-6" fill="currentColor" aria-hidden="true">
+            <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.99 3.66 9.12 8.44 9.88v-6.99H7.9v-2.9h2.54V9.83c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2v2.45h-1.25c-1.23 0-1.62.77-1.62 1.56v1.87h2.77l-.44 2.9h-2.33V21.9C18.34 21.12 22 16.99 22 12z" />
+          </svg>
         </button>
+
         <button
           type="button"
           onClick={() => onShare("whatsapp")}
-          className="rounded-full bg-emerald-500 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-white transition hover:bg-emerald-600"
+          aria-label="Share on WhatsApp"
+          className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500 text-white shadow-sm transition hover:bg-emerald-600"
         >
-          WhatsApp
+          <svg viewBox="0 0 24 24" className="h-6 w-6" fill="currentColor" aria-hidden="true">
+            <path d="M20.52 3.48A11.92 11.92 0 0 0 12 0C5.38 0 .01 5.37.01 12c0 2.11.55 4.18 1.6 6.01L0 24l6.28-1.62A11.93 11.93 0 0 0 12 24c6.62 0 12-5.37 12-12 0-3.2-1.24-6.2-3.48-8.52zm-1.8 14.14c-.3.84-1.8 1.6-2.58 1.72-.7.11-1.5.17-3.01-.5-2.01-.88-3.3-2.58-3.81-3.3-.5-.72-.96-1.03-1.45-1.16-.38-.11-.92-.12-1.66-.47-.68-.33-1.1-.76-1.22-1.16-.14-.44-.14-.8-.01-1.17.13-.36.57-.8 1.22-1.2.14-.08.26-.15.36-.22.12-.08.26-.09.4-.03.3.1.59.46.94 1.08.28.45.45.65.65.74.17.07.36.05.6-.01.24-.07.94-.34 1.1-.37.15-.03.3-.03.42-.01.12.02.28.01.43.13.14.12.5.52.6.63.1.12.15.2.1.36-.05.15-.29.44-.42.57-.12.12-.24.24-.1.5.14.26.7 1.15 1.51 1.87 1.05.96 1.94 1.24 2.33 1.38.4.14.63.12.86-.07.22-.2.96-1.11 1.08-1.5.12-.4.12-.74.08-.81-.04-.08-.15-.12-.33-.2-.18-.08-1.07-.5-1.24-.55-.18-.06-.31-.09-.44.08-.12.17-.47.5-.58.6-.12.1-.24.12-.45.04-.21-.07-.88-.32-1.68-1.04-.62-.55-1.04-1.23-1.16-1.42-.12-.2-.01-.31.09-.38.09-.06.2-.15.3-.23.1-.08.14-.14.21-.22.07-.08.03-.18-.01-.27-.05-.09-.44-1.07-.61-1.46-.15-.37-.3-.32-.42-.32-.1 0-.23 0-.35 0s-.42.06-.64.3c-.22.24-.84.82-.84 2 0 1.19.86 2.34.98 2.5.14.17 1.72 2.7 4.17 3.78 2.45 1.07 2.45.72 2.89.68.44-.05 1.42-.58 1.62-1.14.19-.55.19-1.02.13-1.11-.05-.08-.19-.12-.4-.2z" />
+          </svg>
         </button>
       </div>
 
