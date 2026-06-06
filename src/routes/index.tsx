@@ -466,39 +466,6 @@ function PictorialModalBody() {
                 />
               </filter>
             </defs>
-            <g
-              transform="translate(8 6) rotate(-2 50 12)"
-              fill="none"
-              stroke="#fff6da"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              filter="url(#doodleShadow)"
-            >
-              <path
-                d="M33.5 14.5 52 6.8 70.4 14.8 52.1 21.5 33.5 14.5Z"
-                fill="#fff6da"
-                stroke="#2b2025"
-                strokeWidth="1.15"
-              />
-              <path
-                d="M37.6 16.2c2.6 4.1 12.4 5.2 18.9.2l-.9 6.2c-4.8 2.9-12.1 2.8-17.1-.1l-.9-6.3Z"
-                fill="#c8324a"
-                stroke="#2b2025"
-                strokeWidth="1.05"
-              />
-              <path d="M69.8 14.4c5.2 4 6.2 7.8 5.3 11.7" stroke="#2b2025" strokeWidth="0.95" />
-              <path d="M75.2 26.1c-1.2 1.1-2.1 2.5-2.8 4.1" stroke="#2b2025" strokeWidth="0.85" />
-              <path d="M75.2 26.1c.9 1.6 1.2 3.2 1.1 5" stroke="#2b2025" strokeWidth="0.85" />
-              <path d="M25.8 27.6c-3.7 1-6 2.6-7.8 5.2" strokeWidth="1.15" />
-              <path d="M78 37.2c3.4.8 6.1 2.5 8 5" strokeWidth="1.15" />
-              <path d="M18 65.3c-4 1.6-6.9 4.4-8.7 8.3" strokeWidth="1.05" />
-              <path d="M85.5 65.4c3.1 1.3 5.3 3.3 6.5 6" strokeWidth="1.05" />
-              <path
-                d="M17.7 86.5c7.4 3.8 16.1 5.7 25.6 5.7 9.2 0 18.7-1.8 27.6-5.9"
-                strokeWidth="1.1"
-                strokeDasharray="1.2 2.6"
-              />
-            </g>
             <g filter="url(#doodleShadow)">
               <text
                 x="50"
@@ -560,7 +527,7 @@ function WishesModalBody() {
   };
 
   return (
-    <div className="grid gap-3 sm:grid-cols-2">
+    <div className="grid gap-2 sm:grid-cols-2">
       {WISHES.map((wish, index) => {
         const isOpen = openedWishes.includes(index);
 
@@ -570,7 +537,7 @@ function WishesModalBody() {
             type="button"
             onClick={() => toggleWish(index)}
             aria-expanded={isOpen}
-            className="group relative min-h-[7.5rem] sm:min-h-36 overflow-hidden rounded-md border border-berry/20 bg-[linear-gradient(145deg,rgba(255,246,218,0.96),rgba(255,232,220,0.86))] p-3 sm:p-4 text-left shadow-[0_14px_30px_rgba(127,24,58,0.14)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_38px_rgba(127,24,58,0.2)] focus:outline-none focus:ring-2 focus:ring-berry/60"
+            className="group relative min-h-[6.5rem] sm:min-h-36 overflow-hidden rounded-md border border-berry/20 bg-[linear-gradient(145deg,rgba(255,246,218,0.96),rgba(255,232,220,0.86))] p-3 sm:p-4 text-left shadow-[0_10px_24px_rgba(127,24,58,0.12)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(127,24,58,0.16)] focus:outline-none focus:ring-2 focus:ring-berry/60"
           >
             <span className="absolute -right-5 -top-5 h-16 w-16 rounded-full bg-berry/10 sm:h-20 sm:w-20" />
             <span className="absolute bottom-3 right-4 text-xl sm:text-2xl leading-none text-berry/60">
