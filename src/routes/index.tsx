@@ -609,13 +609,6 @@ function WishesModalBody() {
               </span>
             </span>
 
-            <span
-              className={`absolute inset-x-3 bottom-3 z-10 text-center text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-berry-deep/70 transition duration-300 ${
-                isOpen ? "opacity-0" : "opacity-100"
-              }`}
-            >
-              Tap to unwrap
-            </span>
           </button>
         );
       })}
