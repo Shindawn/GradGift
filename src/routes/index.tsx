@@ -73,11 +73,22 @@ const playCuteSound = (sound: CuteSound) => {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Congrats Graduate! Ma. Loureen P. Tiozon" },
+      { title: "Celebrate Ma. Loureen's Graduation" },
       {
         name: "description",
-        content:
-          "A picnic-themed tribute for Ma. Loureen P. Tiozon, Cum Laude, University of Santo Tomas, Batch 2026.",
+        content: "Celebrate Ma. Loureen's graduation with this strawberry picnic tribute.",
+      },
+      { property: "og:title", content: "Celebrate Ma. Loureen's Graduation" },
+      {
+        property: "og:description",
+        content: "Celebrate Ma. Loureen's graduation with this strawberry picnic tribute.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Celebrate Ma. Loureen's Graduation" },
+      {
+        name: "twitter:description",
+        content: "Celebrate Ma. Loureen's graduation with this strawberry picnic tribute.",
       },
     ],
     links: [

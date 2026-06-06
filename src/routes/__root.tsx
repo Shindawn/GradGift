@@ -77,18 +77,27 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Pixel Perfect is a responsive mobile website that brings your design vision to life." },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Pixel Perfect is a responsive mobile website that brings your design vision to life." },
+      { title: "Celebrate Ma. Loureen's Graduation" },
+      {
+        name: "description",
+        content:
+          "Celebrate Ma. Loureen's graduation with this strawberry picnic tribute.",
+      },
+      { name: "author", content: "Ma. Loureen P. Tiozon Graduation Tribute" },
+      { property: "og:title", content: "Celebrate Ma. Loureen's Graduation" },
+      {
+        property: "og:description",
+        content:
+          "Celebrate Ma. Loureen's graduation with this strawberry picnic tribute.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "Lovable App" },
-      { name: "twitter:description", content: "Pixel Perfect is a responsive mobile website that brings your design vision to life." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b2d6d296-7b2e-47a4-b915-2f1ec9e08722/id-preview-58fc3f58--564b8fc1-171a-4283-8ff9-8ee4b1c66934.lovable.app-1780561781692.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b2d6d296-7b2e-47a4-b915-2f1ec9e08722/id-preview-58fc3f58--564b8fc1-171a-4283-8ff9-8ee4b1c66934.lovable.app-1780561781692.png" },
+      { name: "twitter:title", content: "Celebrate Ma. Loureen's Graduation" },
+      {
+        name: "twitter:description",
+        content:
+          "Celebrate Ma. Loureen's graduation with this strawberry picnic tribute.",
+      },
     ],
     links: [
       {
