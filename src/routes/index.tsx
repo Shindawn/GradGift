@@ -467,6 +467,7 @@ function PictorialModalBody() {
               </filter>
             </defs>
             <g
+              transform="translate(8 6) rotate(-2 50 12)"
               fill="none"
               stroke="#fff6da"
               strokeLinecap="round"
@@ -569,10 +570,10 @@ function WishesModalBody() {
             type="button"
             onClick={() => toggleWish(index)}
             aria-expanded={isOpen}
-            className="group relative min-h-36 overflow-hidden rounded-md border border-berry/20 bg-[linear-gradient(145deg,rgba(255,246,218,0.96),rgba(255,232,220,0.86))] p-4 text-left shadow-[0_14px_30px_rgba(127,24,58,0.14)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_38px_rgba(127,24,58,0.2)] focus:outline-none focus:ring-2 focus:ring-berry/60"
+            className="group relative min-h-[7.5rem] sm:min-h-36 overflow-hidden rounded-md border border-berry/20 bg-[linear-gradient(145deg,rgba(255,246,218,0.96),rgba(255,232,220,0.86))] p-3 sm:p-4 text-left shadow-[0_14px_30px_rgba(127,24,58,0.14)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_38px_rgba(127,24,58,0.2)] focus:outline-none focus:ring-2 focus:ring-berry/60"
           >
-            <span className="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-berry/10" />
-            <span className="absolute bottom-3 right-4 text-2xl leading-none text-berry/60">
+            <span className="absolute -right-5 -top-5 h-16 w-16 rounded-full bg-berry/10 sm:h-20 sm:w-20" />
+            <span className="absolute bottom-3 right-4 text-xl sm:text-2xl leading-none text-berry/60">
               🍒
             </span>
 
@@ -593,7 +594,7 @@ function WishesModalBody() {
                 isOpen ? "scale-75 opacity-0" : "opacity-100 group-hover:rotate-6"
               }`}
             >
-              <span className="absolute left-1/2 top-1/2 h-5 w-9 -translate-x-1/2 -translate-y-1/2 rounded-[50%] border-2 border-cream bg-transparent" />
+              <span className="absolute left-1/2 top-1/2 h-4 w-8 sm:h-5 sm:w-9 -translate-x-1/2 -translate-y-1/2 rounded-[50%] border-2 border-cream bg-transparent" />
             </span>
 
             <span
@@ -601,10 +602,10 @@ function WishesModalBody() {
                 isOpen ? "opacity-100" : "opacity-0"
               }`}
             >
-              <span className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-berry-deep/70">
+              <span className="text-[0.62rem] sm:text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-berry-deep/70">
                 {wish.label}
               </span>
-              <span className="mt-8 block text-sm leading-relaxed text-berry-deep">
+              <span className="mt-6 sm:mt-8 block text-[0.88rem] sm:text-sm leading-relaxed text-berry-deep">
                 {wish.text}
               </span>
             </span>
