@@ -62,9 +62,12 @@ const playCuteSound = (sound: CuteSound) => {
     });
   }
 
-  window.setTimeout(() => {
-    audioContext.close().catch(() => undefined);
-  }, finishAt * 1000 + 120);
+  window.setTimeout(
+    () => {
+      audioContext.close().catch(() => undefined);
+    },
+    finishAt * 1000 + 120,
+  );
 };
 
 export const Route = createFileRoute("/")({
@@ -197,9 +200,7 @@ function CakeModalBody({
       )}
 
       {!hasBlown ? (
-        <p className="text-xs text-berry-deep/70">
-          Tip: speak or blow softly into the mic.
-        </p>
+        <p className="text-xs text-berry-deep/70">Tip: speak or blow softly into the mic.</p>
       ) : null}
     </div>
   );
@@ -407,13 +408,136 @@ function ShareModalBody({
             {shareCopied ? "Copied!" : "Copy link"}
           </button>
         </div>
-        <p className="mt-2 text-[0.68rem] text-berry-deep/70">Copy the page link to share it anywhere.</p>
+        <p className="mt-2 text-[0.68rem] text-berry-deep/70">
+          Copy the page link to share it anywhere.
+        </p>
       </div>
     </div>
   );
 }
 
-type ModalKey = "letter" | "pictorial" | "wishes" | "achievements" | "share" | "cake" | "music" | null;
+function PictorialModalBody() {
+  const [isDoodleVisible, setIsDoodleVisible] = useState(false);
+
+  return (
+    <div className="overflow-hidden rounded-md bg-cream/40 p-2">
+      <button
+        type="button"
+        onClick={() => setIsDoodleVisible((visible) => !visible)}
+        aria-pressed={isDoodleVisible}
+        aria-label="Show graduation doodle on photo"
+        className="group relative block w-full cursor-pointer overflow-hidden rounded-sm focus:outline-none focus:ring-2 focus:ring-berry/60"
+      >
+        <img
+          src={graduatePhoto}
+          alt="Ma. Loureen Tiozon graduation portrait"
+          className="h-auto w-full object-cover"
+        />
+        <div
+          className={`pointer-events-none absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100 ${
+            isDoodleVisible ? "opacity-100" : ""
+          }`}
+        >
+          <div className="absolute inset-0 bg-cream/5" />
+          <svg
+            viewBox="0 0 100 125"
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full animate-doodle-pop"
+          >
+            <defs>
+              <filter id="doodleShadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow
+                  dx="0"
+                  dy="1.2"
+                  stdDeviation="1.4"
+                  floodColor="#1f1b22"
+                  floodOpacity="0.55"
+                />
+              </filter>
+            </defs>
+            <g
+              fill="none"
+              stroke="#fff6da"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              filter="url(#doodleShadow)"
+            >
+              <path
+                d="M37.5 20.5 52 14.8 67.4 20.8 52.1 27.5 37.5 20.5Z"
+                fill="#fff6da"
+                stroke="#2b2025"
+                strokeWidth="1.15"
+              />
+              <path
+                d="M42.6 23.2c2.6 4.1 12.4 5.2 18.9.2l-.9 6.2c-4.8 2.9-12.1 2.8-17.1-.1l-.9-6.3Z"
+                fill="#c8324a"
+                stroke="#2b2025"
+                strokeWidth="1.05"
+              />
+              <path d="M66.8 21.4c5.2 4 6.2 7.8 5.3 11.7" stroke="#2b2025" strokeWidth="0.95" />
+              <path d="M72.2 33.1c-1.2 1.1-2.1 2.5-2.8 4.1" stroke="#2b2025" strokeWidth="0.85" />
+              <path d="M72.2 33.1c.9 1.6 1.2 3.2 1.1 5" stroke="#2b2025" strokeWidth="0.85" />
+              <path d="M31.8 34.6c-3.7 1-6 2.6-7.8 5.2" strokeWidth="1.15" />
+              <path d="M75 44.2c3.4.8 6.1 2.5 8 5" strokeWidth="1.15" />
+              <path d="M24 72.3c-4 1.6-6.9 4.4-8.7 8.3" strokeWidth="1.05" />
+              <path d="M82.5 72.4c3.1 1.3 5.3 3.3 6.5 6" strokeWidth="1.05" />
+              <path
+                d="M23.7 93.5c7.4 3.8 16.1 5.7 25.6 5.7 9.2 0 18.7-1.8 27.6-5.9"
+                strokeWidth="1.1"
+                strokeDasharray="1.2 2.6"
+              />
+            </g>
+            <g filter="url(#doodleShadow)">
+              <text
+                x="50"
+                y="91"
+                textAnchor="middle"
+                fill="#fff6da"
+                stroke="#2b2025"
+                strokeWidth="0.85"
+                paintOrder="stroke fill"
+                fontFamily="'Pinyon Script', cursive"
+                fontSize="13"
+                transform="rotate(-5 50 91)"
+              >
+                Just graduated!
+              </text>
+              <text
+                x="50"
+                y="100"
+                textAnchor="middle"
+                fill="#c8324a"
+                stroke="#fff6da"
+                strokeWidth="0.55"
+                paintOrder="stroke fill"
+                fontFamily="'Playfair Display', serif"
+                fontSize="5.2"
+                fontWeight="700"
+                letterSpacing="0"
+                transform="rotate(-3 50 100)"
+              >
+                BATCH 2026
+              </text>
+            </g>
+          </svg>
+        </div>
+      </button>
+      <p className="mt-3 text-center text-xs italic text-berry-deep">
+        Ma. Loureen P. Tiozon &middot; UST Batch 2026
+      </p>
+    </div>
+  );
+}
+
+type ModalKey =
+  | "letter"
+  | "pictorial"
+  | "wishes"
+  | "achievements"
+  | "share"
+  | "cake"
+  | "music"
+  | null;
 
 const MODAL_CONTENT: Record<
   Exclude<ModalKey, "cake" | "music" | "share" | null>,
@@ -426,13 +550,13 @@ const MODAL_CONTENT: Record<
       <div className="space-y-3 text-sm leading-relaxed">
         <p>Dearest Loureen,</p>
         <p>
-          From the very first day of UST, you carried this journey with so much heart.
-          Every late night, every shared laugh, every push toward that Cum Laude —
-          it all mattered, and it all led here.
+          From the very first day of UST, you carried this journey with so much heart. Every late
+          night, every shared laugh, every push toward that Cum Laude — it all mattered, and it all
+          led here.
         </p>
         <p>
-          Thank you for being the kind of person who makes a whole room feel
-          lighter. We are endlessly proud of you. Keep blooming, Batch 2026.
+          Thank you for being the kind of person who makes a whole room feel lighter. We are
+          endlessly proud of you. Keep blooming, Batch 2026.
         </p>
         <p className="italic text-berry-deep">— With love, lescy</p>
       </div>
@@ -441,18 +565,7 @@ const MODAL_CONTENT: Record<
   pictorial: {
     title: "Pictorial",
     subtitle: "A moment worth keeping",
-    body: (
-      <div className="overflow-hidden rounded-md bg-cream/40 p-2">
-        <img
-          src={graduatePhoto}
-          alt="Ma. Loureen Tiozon graduation portrait"
-          className="h-auto w-full rounded-sm object-cover"
-        />
-        <p className="mt-3 text-center text-xs italic text-berry-deep">
-          Ma. Loureen P. Tiozon · UST Batch 2026
-        </p>
-      </div>
-    ),
+    body: <PictorialModalBody />,
   },
   wishes: {
     title: "Wishes",
@@ -466,7 +579,9 @@ const MODAL_CONTENT: Record<
           </li>
           <li className="flex gap-3 items-start rounded-lg bg-berry/8 p-3 border border-berry/20">
             <span className="text-lg shrink-0">🎂</span>
-            <span className="text-berry-deep">May your dreams rise gently, like cake in the oven.</span>
+            <span className="text-berry-deep">
+              May your dreams rise gently, like cake in the oven.
+            </span>
           </li>
           <li className="flex gap-3 items-start rounded-lg bg-berry/8 p-3 border border-berry/20">
             <span className="text-lg shrink-0">💌</span>
@@ -474,7 +589,9 @@ const MODAL_CONTENT: Record<
           </li>
           <li className="flex gap-3 items-start rounded-lg bg-berry/8 p-3 border border-berry/20">
             <span className="text-lg shrink-0">🌿</span>
-            <span className="text-berry-deep">May you keep choosing yourself, again and again.</span>
+            <span className="text-berry-deep">
+              May you keep choosing yourself, again and again.
+            </span>
           </li>
         </ul>
       </div>
@@ -544,6 +661,7 @@ function Index() {
       @keyframes light-sweep { 0%,100%{transform:rotate(-24deg) translateX(-4px);opacity:.42} 50%{transform:rotate(-10deg) translateX(22px);opacity:.82} }
       @keyframes light-sweep-reverse { 0%,100%{transform:rotate(24deg) translateX(4px);opacity:.38} 50%{transform:rotate(10deg) translateX(-22px);opacity:.76} }
       @keyframes disco-glint { 0%,100%{opacity:.45;transform:scale(.65)} 45%{opacity:1;transform:scale(1.25)} 70%{opacity:.72;transform:scale(.9)} }
+      @keyframes doodle-pop { 0%{transform:scale(.96) rotate(-1deg)} 55%{transform:scale(1.015) rotate(.7deg)} 100%{transform:scale(1) rotate(0)} }
       .anim-floaty  { animation: floaty 4.5s ease-in-out infinite; }
       .anim-sway    { animation: sway 5s ease-in-out infinite; transform-origin: 50% 100%; }
       .anim-wiggle  { animation: wiggle 3.8s ease-in-out infinite; }
@@ -557,6 +675,7 @@ function Index() {
       .animate-light-sweep { animation: light-sweep 2.8s ease-in-out infinite; }
       .animate-light-sweep-reverse { animation: light-sweep-reverse 3.2s ease-in-out infinite; }
       .animate-disco-glint { animation: disco-glint 1.7s ease-in-out infinite; }
+      .animate-doodle-pop { animation: doodle-pop .42s ease-out both; transform-origin: 50% 42%; }
     `;
     document.head.appendChild(style);
   }, []);
@@ -590,8 +709,7 @@ function Index() {
     setOpen("share");
   };
 
-  const shareText =
-    "Celebrate Ma. Loureen's graduation with this strawberry picnic tribute!";
+  const shareText = "Celebrate Ma. Loureen's graduation with this strawberry picnic tribute!";
 
   const shareToPlatform = (platform: "twitter" | "facebook" | "whatsapp") => {
     if (!currentUrl) return;
@@ -770,9 +888,7 @@ function Index() {
       <section className="relative mx-auto flex min-h-screen w-full max-w-md flex-col items-center justify-center px-4 py-10">
         <div className="relative aspect-[3/4] w-full anim-fade-up">
           {/* Gingham picnic blanket */}
-          <Gingham
-            className="anim-breathe absolute left-1/2 top-1/2 h-[78%] w-[92%] -translate-x-1/2 -translate-y-1/2 rounded-sm"
-          />
+          <Gingham className="anim-breathe absolute left-1/2 top-1/2 h-[78%] w-[92%] -translate-x-1/2 -translate-y-1/2 rounded-sm" />
 
           {/* Certificate envelope back — centered */}
           <div
