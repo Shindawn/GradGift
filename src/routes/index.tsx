@@ -991,13 +991,13 @@ function Index() {
               className="mt-3 text-berry"
               style={{ fontFamily: "Pinyon Script, cursive", fontSize: "2rem", lineHeight: 0.95 }}
             >
-              Ma. Loureen P.
+              Ma. Loureen
             </div>
             <div
               className="text-berry"
               style={{ fontFamily: "Pinyon Script, cursive", fontSize: "2rem", lineHeight: 1 }}
             >
-              Tiozon
+              P. Tiozon
             </div>
 
             <div className="mt-3 text-[0.6rem] font-semibold tracking-[0.14em] text-berry-deep">
