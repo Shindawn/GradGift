@@ -73,22 +73,22 @@ const playCuteSound = (sound: CuteSound) => {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Celebrate Ma. Loureen's Graduation" },
+      { title: "Celebrate Cathmae's Graduation" },
       {
         name: "description",
-        content: "Celebrate Ma. Loureen's graduation with this strawberry picnic tribute.",
+        content: "Celebrate Cathmae's graduation with this strawberry picnic tribute.",
       },
-      { property: "og:title", content: "Celebrate Ma. Loureen's Graduation" },
+      { property: "og:title", content: "Celebrate Cathmae's Graduation" },
       {
         property: "og:description",
-        content: "Celebrate Ma. Loureen's graduation with this strawberry picnic tribute.",
+        content: "Celebrate Cathmae's graduation with this strawberry picnic tribute.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:title", content: "Celebrate Ma. Loureen's Graduation" },
+      { name: "twitter:title", content: "Celebrate Cathmae's Graduation" },
       {
         name: "twitter:description",
-        content: "Celebrate Ma. Loureen's graduation with this strawberry picnic tribute.",
+        content: "Celebrate Cathmae's graduation with this strawberry picnic tribute.",
       },
     ],
     links: [
@@ -441,7 +441,7 @@ function PictorialModalBody() {
       >
         <img
           src={graduatePhoto}
-          alt="Ma. Loureen Tiozon graduation portrait"
+          alt="Cathmae's graduation portrait"
           className="h-auto w-full object-cover"
         />
         <div
@@ -474,26 +474,26 @@ function PictorialModalBody() {
               filter="url(#doodleShadow)"
             >
               <path
-                d="M37.5 20.5 52 14.8 67.4 20.8 52.1 27.5 37.5 20.5Z"
+                d="M33.5 14.5 52 6.8 70.4 14.8 52.1 21.5 33.5 14.5Z"
                 fill="#fff6da"
                 stroke="#2b2025"
                 strokeWidth="1.15"
               />
               <path
-                d="M42.6 23.2c2.6 4.1 12.4 5.2 18.9.2l-.9 6.2c-4.8 2.9-12.1 2.8-17.1-.1l-.9-6.3Z"
+                d="M37.6 16.2c2.6 4.1 12.4 5.2 18.9.2l-.9 6.2c-4.8 2.9-12.1 2.8-17.1-.1l-.9-6.3Z"
                 fill="#c8324a"
                 stroke="#2b2025"
                 strokeWidth="1.05"
               />
-              <path d="M66.8 21.4c5.2 4 6.2 7.8 5.3 11.7" stroke="#2b2025" strokeWidth="0.95" />
-              <path d="M72.2 33.1c-1.2 1.1-2.1 2.5-2.8 4.1" stroke="#2b2025" strokeWidth="0.85" />
-              <path d="M72.2 33.1c.9 1.6 1.2 3.2 1.1 5" stroke="#2b2025" strokeWidth="0.85" />
-              <path d="M31.8 34.6c-3.7 1-6 2.6-7.8 5.2" strokeWidth="1.15" />
-              <path d="M75 44.2c3.4.8 6.1 2.5 8 5" strokeWidth="1.15" />
-              <path d="M24 72.3c-4 1.6-6.9 4.4-8.7 8.3" strokeWidth="1.05" />
-              <path d="M82.5 72.4c3.1 1.3 5.3 3.3 6.5 6" strokeWidth="1.05" />
+              <path d="M69.8 14.4c5.2 4 6.2 7.8 5.3 11.7" stroke="#2b2025" strokeWidth="0.95" />
+              <path d="M75.2 26.1c-1.2 1.1-2.1 2.5-2.8 4.1" stroke="#2b2025" strokeWidth="0.85" />
+              <path d="M75.2 26.1c.9 1.6 1.2 3.2 1.1 5" stroke="#2b2025" strokeWidth="0.85" />
+              <path d="M25.8 27.6c-3.7 1-6 2.6-7.8 5.2" strokeWidth="1.15" />
+              <path d="M78 37.2c3.4.8 6.1 2.5 8 5" strokeWidth="1.15" />
+              <path d="M18 65.3c-4 1.6-6.9 4.4-8.7 8.3" strokeWidth="1.05" />
+              <path d="M85.5 65.4c3.1 1.3 5.3 3.3 6.5 6" strokeWidth="1.05" />
               <path
-                d="M23.7 93.5c7.4 3.8 16.1 5.7 25.6 5.7 9.2 0 18.7-1.8 27.6-5.9"
+                d="M17.7 86.5c7.4 3.8 16.1 5.7 25.6 5.7 9.2 0 18.7-1.8 27.6-5.9"
                 strokeWidth="1.1"
                 strokeDasharray="1.2 2.6"
               />
@@ -501,7 +501,7 @@ function PictorialModalBody() {
             <g filter="url(#doodleShadow)">
               <text
                 x="50"
-                y="91"
+                y="87"
                 textAnchor="middle"
                 fill="#fff6da"
                 stroke="#2b2025"
@@ -509,7 +509,7 @@ function PictorialModalBody() {
                 paintOrder="stroke fill"
                 fontFamily="'Pinyon Script', cursive"
                 fontSize="13"
-                transform="rotate(-5 50 91)"
+                transform="rotate(-5 50 87)"
               >
                 Just graduated!
               </text>
@@ -518,7 +518,7 @@ function PictorialModalBody() {
         </div>
       </button>
       <p className="mt-3 text-center text-xs italic text-berry-deep">
-        Ma. Loureen P. Tiozon &middot; UST Batch 2026
+        Catherine Mae Pontanarest &middot; USANT Batch 2026
       </p>
     </div>
   );
@@ -528,17 +528,17 @@ const WISHES = [
   {
     label: "First wish",
     accent: "#c8324a",
-    text: "May every season be kinder than the last.",
+    text: "May you path be as gentle as your compassion for others.",
   },
   {
     label: "Second wish",
-    accent: "#7f183a",
-    text: "May your dreams rise gently, like cake in the oven.",
+    accent: "#dfb959",
+    text: "May every almost turn into absolutely",
   },
   {
     label: "Third wish",
-    accent: "#9f2d52",
-    text: "May love always find your address.",
+    accent: "#be5778",
+    text: "May your heart stay soft while dreams grow big",
   },
   {
     label: "Fourth wish",
@@ -635,15 +635,14 @@ const MODAL_CONTENT: Record<
     subtitle: "From everyone who cheered you on",
     body: (
       <div className="space-y-3 text-sm leading-relaxed">
-        <p>Dearest Loureen,</p>
+        <p>Dearest Cathmae,</p>
         <p>
-          From the very first day of UST, you carried this journey with so much heart. Every late
-          night, every shared laugh, every push toward that Cum Laude — it all mattered, and it all
-          led here.
+          Cum Laude, yay you did it! All those late nights and sacrifices paid off. I've always admired your discipline
+          and heart, and this proves it. You inspire me so much.
         </p>
         <p>
           Thank you for being the kind of person who makes a whole room feel lighter. We are
-          endlessly proud of you. Keep blooming, Batch 2026.
+          endlessly proud of you. Keep striving, mwa.
         </p>
         <p className="italic text-berry-deep">— With love, lescy</p>
       </div>
@@ -771,7 +770,7 @@ function Index() {
     setOpen("share");
   };
 
-  const shareText = "Celebrate Ma. Loureen's graduation with this strawberry picnic tribute!";
+  const shareText = "Celebrate Cathmae's graduation with this strawberry picnic tribute!";
 
   const shareToPlatform = (platform: "twitter" | "facebook" | "whatsapp") => {
     if (!currentUrl) return;
@@ -984,24 +983,24 @@ function Index() {
             </div>
 
             <div className="mt-2 text-[0.55rem] font-semibold tracking-[0.18em] text-berry-deep">
-              UNIVERSITY OF SANTO TOMAS
+              UNIVERSITY OF SAINT ANTHONY
             </div>
 
             <div
               className="mt-3 text-berry"
               style={{ fontFamily: "Pinyon Script, cursive", fontSize: "2rem", lineHeight: 0.95 }}
             >
-              Ma. Loureen
+              Catherine Mae
             </div>
             <div
               className="text-berry"
               style={{ fontFamily: "Pinyon Script, cursive", fontSize: "2rem", lineHeight: 1 }}
             >
-              P. Tiozon
+              B. Pontanares
             </div>
 
             <div className="mt-3 text-[0.6rem] font-semibold tracking-[0.14em] text-berry-deep">
-              BS POLITICAL SCIENCE
+              BS in PSYCHOLOGY
             </div>
 
             <div className="mt-3 flex flex-col items-center">
@@ -1100,7 +1099,7 @@ function Index() {
         </div>
 
         <p className="mt-4 text-center text-xs text-cream/90 drop-shadow">
-          Tap the strawberry cake to celebrate, then open the cherry basket for the song ✨
+          Tap the strawberry cake to celebrate, camera, letter and cherries! ✨
         </p>
       </section>
 
@@ -1127,7 +1126,7 @@ function Index() {
                     : open === "music"
                       ? "You're On Your Own, Kid"
                       : open === "share"
-                        ? "Share this strawberry tribute with friends."
+                        ? "Share this grad tribute with friends."
                         : MODAL_CONTENT[open].subtitle}
                 </DialogDescription>
               </DialogHeader>
