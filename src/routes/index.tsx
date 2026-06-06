@@ -864,13 +864,13 @@ function Index() {
         const rms = Math.sqrt(sum / dataArray.length);
         setCakeVolume(rms);
 
-        if (rms > 0.12) {
+        if (rms > 0.08) {
           blowFrames += 1;
         } else {
           blowFrames = 0;
         }
 
-        if (blowFrames > 8) {
+        if (blowFrames > 5) {
           setCakeBlown(true);
           setCakeStatus("success");
           cleanupCakeAudio();
