@@ -502,22 +502,6 @@ function PictorialModalBody() {
               >
                 Just graduated!
               </text>
-              <text
-                x="50"
-                y="100"
-                textAnchor="middle"
-                fill="#c8324a"
-                stroke="#fff6da"
-                strokeWidth="0.55"
-                paintOrder="stroke fill"
-                fontFamily="'Playfair Display', serif"
-                fontSize="5.2"
-                fontWeight="700"
-                letterSpacing="0"
-                transform="rotate(-3 50 100)"
-              >
-                BATCH 2026
-              </text>
             </g>
           </svg>
         </div>
