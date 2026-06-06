@@ -42,7 +42,7 @@ const playCuteSound = (sound: CuteSound) => {
     oscillator.type = "sine";
     oscillator.frequency.setValueAtTime(720, now);
     oscillator.frequency.exponentialRampToValueAtTime(1180, now + 0.08);
-    gain.gain.exponentialRampToValueAtTime(0.06, now + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.22, now + 0.01);
     gain.gain.exponentialRampToValueAtTime(0.0001, now + finishAt);
     oscillator.connect(gain);
     oscillator.start(now);
@@ -54,7 +54,7 @@ const playCuteSound = (sound: CuteSound) => {
       const oscillator = audioContext.createOscillator();
       oscillator.type = "triangle";
       oscillator.frequency.setValueAtTime(frequency, start);
-      gain.gain.exponentialRampToValueAtTime(0.075, start + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.18, start + 0.02);
       gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.22);
       oscillator.connect(gain);
       oscillator.start(start);
