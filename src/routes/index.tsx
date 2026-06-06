@@ -21,6 +21,52 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 
+type CuteSound = "click" | "cake";
+
+const playCuteSound = (sound: CuteSound) => {
+  if (typeof window === "undefined") return;
+
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass) return;
+
+  const audioContext = new AudioContextClass();
+  const now = audioContext.currentTime;
+  const gain = audioContext.createGain();
+  gain.connect(audioContext.destination);
+
+  const finishAt = sound === "cake" ? 0.75 : 0.18;
+  gain.gain.setValueAtTime(0.0001, now);
+
+  if (sound === "click") {
+    const oscillator = audioContext.createOscillator();
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(720, now);
+    oscillator.frequency.exponentialRampToValueAtTime(1180, now + 0.08);
+    gain.gain.exponentialRampToValueAtTime(0.06, now + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + finishAt);
+    oscillator.connect(gain);
+    oscillator.start(now);
+    oscillator.stop(now + finishAt);
+  } else {
+    const notes = [523.25, 659.25, 783.99, 1046.5];
+    notes.forEach((frequency, index) => {
+      const start = now + index * 0.08;
+      const oscillator = audioContext.createOscillator();
+      oscillator.type = "triangle";
+      oscillator.frequency.setValueAtTime(frequency, start);
+      gain.gain.exponentialRampToValueAtTime(0.075, start + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.22);
+      oscillator.connect(gain);
+      oscillator.start(start);
+      oscillator.stop(start + 0.28);
+    });
+  }
+
+  window.setTimeout(() => {
+    audioContext.close().catch(() => undefined);
+  }, finishAt * 1000 + 120);
+};
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -461,6 +507,22 @@ function Index() {
   const sourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const animationRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const handleButtonClick = (event: MouseEvent) => {
+      if (!(event.target instanceof Element)) return;
+      if (!event.target.closest("button")) return;
+      playCuteSound("click");
+    };
+
+    document.addEventListener("click", handleButtonClick);
+    return () => document.removeEventListener("click", handleButtonClick);
+  }, []);
+
+  useEffect(() => {
+    if (cakeStatus !== "success" || !cakeBlown) return;
+    playCuteSound("cake");
+  }, [cakeStatus, cakeBlown]);
 
   // Floating motion via keyframes injected once
   useEffect(() => {
