@@ -486,7 +486,7 @@ function PictorialModalBody() {
         </div>
       </button>
       <p className="mt-3 text-center text-xs italic text-berry-deep">
-        Catherine Mae Pontanarest &middot; USANT Batch 2026
+        Catherine Mae B. Pontanarest &middot; USANT Batch 2026
       </p>
     </div>
   );
