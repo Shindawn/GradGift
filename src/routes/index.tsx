@@ -524,6 +524,105 @@ function PictorialModalBody() {
   );
 }
 
+const WISHES = [
+  {
+    label: "First wish",
+    accent: "#c8324a",
+    text: "May every season be kinder than the last.",
+  },
+  {
+    label: "Second wish",
+    accent: "#7f183a",
+    text: "May your dreams rise gently, like cake in the oven.",
+  },
+  {
+    label: "Third wish",
+    accent: "#9f2d52",
+    text: "May love always find your address.",
+  },
+  {
+    label: "Fourth wish",
+    accent: "#4b7f45",
+    text: "May you keep choosing yourself, again and again.",
+  },
+];
+
+function WishesModalBody() {
+  const [openedWishes, setOpenedWishes] = useState<number[]>([]);
+
+  const toggleWish = (index: number) => {
+    setOpenedWishes((current) =>
+      current.includes(index)
+        ? current.filter((wishIndex) => wishIndex !== index)
+        : [...current, index],
+    );
+  };
+
+  return (
+    <div className="grid gap-3 sm:grid-cols-2">
+      {WISHES.map((wish, index) => {
+        const isOpen = openedWishes.includes(index);
+
+        return (
+          <button
+            key={wish.label}
+            type="button"
+            onClick={() => toggleWish(index)}
+            aria-expanded={isOpen}
+            className="group relative min-h-36 overflow-hidden rounded-md border border-berry/20 bg-[linear-gradient(145deg,rgba(255,246,218,0.96),rgba(255,232,220,0.86))] p-4 text-left shadow-[0_14px_30px_rgba(127,24,58,0.14)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_38px_rgba(127,24,58,0.2)] focus:outline-none focus:ring-2 focus:ring-berry/60"
+          >
+            <span className="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-berry/10" />
+            <span className="absolute bottom-3 right-4 text-2xl leading-none text-berry/60">
+              🍒
+            </span>
+
+            <span
+              className={`absolute left-0 top-1/2 h-7 w-full -translate-y-1/2 transition duration-500 ${
+                isOpen ? "scale-x-110 opacity-20" : "opacity-95"
+              }`}
+              style={{ backgroundColor: wish.accent }}
+            />
+            <span
+              className={`absolute left-1/2 top-0 h-full w-7 -translate-x-1/2 transition duration-500 ${
+                isOpen ? "scale-y-110 opacity-20" : "opacity-95"
+              }`}
+              style={{ backgroundColor: wish.accent }}
+            />
+            <span
+              className={`absolute left-1/2 top-1/2 h-12 w-12 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-cream bg-berry shadow-[0_8px_18px_rgba(127,24,58,0.24)] transition duration-500 ${
+                isOpen ? "scale-75 opacity-0" : "opacity-100 group-hover:rotate-6"
+              }`}
+            >
+              <span className="absolute left-1/2 top-1/2 h-5 w-9 -translate-x-1/2 -translate-y-1/2 rounded-[50%] border-2 border-cream bg-transparent" />
+            </span>
+
+            <span
+              className={`relative z-10 flex h-full min-h-28 flex-col justify-between transition duration-500 ${
+                isOpen ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              <span className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-berry-deep/70">
+                {wish.label}
+              </span>
+              <span className="mt-8 block text-sm leading-relaxed text-berry-deep">
+                {wish.text}
+              </span>
+            </span>
+
+            <span
+              className={`absolute inset-x-3 bottom-3 z-10 text-center text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-berry-deep/70 transition duration-300 ${
+                isOpen ? "opacity-0" : "opacity-100"
+              }`}
+            >
+              Tap to unwrap
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 type ModalKey =
   | "letter"
   | "pictorial"
@@ -565,32 +664,7 @@ const MODAL_CONTENT: Record<
   wishes: {
     title: "Wishes",
     subtitle: "Sweet notes for the road ahead",
-    body: (
-      <div className="space-y-4">
-        <ul className="space-y-4 text-sm leading-relaxed">
-          <li className="flex gap-3 items-start rounded-lg bg-berry/8 p-3 border border-berry/20">
-            <span className="text-lg shrink-0">🍓</span>
-            <span className="text-berry-deep">May every season be kinder than the last.</span>
-          </li>
-          <li className="flex gap-3 items-start rounded-lg bg-berry/8 p-3 border border-berry/20">
-            <span className="text-lg shrink-0">🎂</span>
-            <span className="text-berry-deep">
-              May your dreams rise gently, like cake in the oven.
-            </span>
-          </li>
-          <li className="flex gap-3 items-start rounded-lg bg-berry/8 p-3 border border-berry/20">
-            <span className="text-lg shrink-0">💌</span>
-            <span className="text-berry-deep">May love always find your address.</span>
-          </li>
-          <li className="flex gap-3 items-start rounded-lg bg-berry/8 p-3 border border-berry/20">
-            <span className="text-lg shrink-0">🌿</span>
-            <span className="text-berry-deep">
-              May you keep choosing yourself, again and again.
-            </span>
-          </li>
-        </ul>
-      </div>
-    ),
+    body: <WishesModalBody />,
   },
   achievements: {
     title: "Achievements Unlocked",
